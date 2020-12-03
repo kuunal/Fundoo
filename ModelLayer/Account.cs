@@ -29,7 +29,7 @@ namespace ModelLayer
         public string Password { get; set; }
         
         [Required]
-        [Column(TypeName = "datetime2")]
+        [Column(TypeName = "date")]
         public DateTime DateOfBirth { get; set; }
 
         [Required]
