@@ -1,3 +1,5 @@
+using BusinessLayer.Concrete;
+using BusinessLayer.Interface;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -5,7 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ModelLayer;
-
+using RepositoryLayer.Concrete;
+using RepositoryLayer.Interface;
 
 namespace Fundoo
 {
@@ -24,6 +27,8 @@ namespace Fundoo
             services.AddDbContext<FundooDbContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("ConnectionString"))
             );
+            services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IAccountService, AccountService>();
             services.AddControllers();
         }
 
