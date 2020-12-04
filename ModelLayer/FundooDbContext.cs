@@ -8,5 +8,9 @@ namespace ModelLayer
         {
         }
         public DbSet<Account> Accounts { get; set; }
+        public DbSet<Note> Notes { get; set; }
+        public DbSet<Collaborator> Collaborators { get; set; }
+        public DbSet<Label> Labels { get; set; }
+
     }
 }
