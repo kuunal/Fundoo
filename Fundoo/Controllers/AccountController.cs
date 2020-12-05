@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Interface;
 using Microsoft.AspNetCore.Mvc;
+using ModelLayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,16 @@ namespace Fundoo.Controllers
         public async Task<IActionResult> Index()
         {
             return Ok(await _service.Get());
+        }
+
+        public async Task<IActionResult> AddAccount(Account account)
+        {
+            Account createdAccount = await _service.AddAccount(account);
+            if (createdAccount == null)
+            {
+                return BadRequest("Error");
+            }
+            return Ok(createdAccount);
         }
     }
 }
