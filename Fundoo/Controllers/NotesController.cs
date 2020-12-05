@@ -19,18 +19,19 @@ namespace Fundoo.Controllers
             _service = service;
         }
 
-        [HttpGet]
-        public IActionResult GetNotes()
-        {
-            List<Notes> notes = await _service.GetNote();
-            if (notes == null)
-            {
-                return Ok("No notes created");
-            }
-            return Ok(notes);
-        }
+        //[HttpGet]
+        //public IActionResult GetNotes()
+        //{
+        //    List<Notes> notes = await _service.GetNote();
+        //    if (notes == null)
+        //    {
+        //        return Ok("No notes created");
+        //    }
+        //    return Ok(notes);
+        //}
 
         [HttpPost]
+        [Route("addnote")]
         public async Task<IActionResult> AddNote(Note note)
         {
             Note addednote = await _service.AddNote(note);
@@ -38,7 +39,7 @@ namespace Fundoo.Controllers
             {
                 return BadRequest();
             }
-            return Ok();
+            return Ok(note);
         }
     }
 }
