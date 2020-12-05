@@ -27,6 +27,7 @@ namespace Fundoo.Controllers
             {
                 return Ok("No notes created");
             }
+            return Ok(notes);
         }
 
         [HttpPost]
