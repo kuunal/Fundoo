@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ModelLayer
 {
@@ -7,8 +8,12 @@ namespace ModelLayer
         [Key]
         public int LabelId { get; set; }
 
+        [ForeignKey("Note")]
         public int NoteId { get; set; }
 
         public string Labels { get; set; }
+
+        public Note Note { get; set; }
+
     }
 }
