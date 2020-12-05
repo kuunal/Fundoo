@@ -20,13 +20,22 @@ namespace ModelLayer
         public DateTime Remainder { get; set; }
 
         [Column(TypeName = "BIT")]
-        public int IsArchieved { get; set; }
+        public bool IsArchieved { get; set; }
 
 
         [Column(TypeName = "BIT")]
-        public int IsPin { get; set; }
+        public bool IsPin { get; set; }
 
         public string Description { get; set; }
         public string Image { get; set; }
+
+        public int? AccountId { get; set; }
+
+        public Account Owner { get; set; }
+
+        public virtual ICollection<Collaborator> Collaborators { get; set; }
+
+        public virtual ICollection<Label> Labels { get; set; }
+
     }
 }
