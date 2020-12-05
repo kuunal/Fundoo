@@ -3,6 +3,7 @@ using ModelLayer;
 using RepositoryLayer.Concrete;
 using RepositoryLayer.Interface;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BusinessLayer.Concrete
@@ -29,9 +30,10 @@ namespace BusinessLayer.Concrete
             return await _repository.GetNote(id);
         }
 
-        public async Task<Note> GetNote()
+        public async Task<List<Note>> GetNotes()
         {
-            throw new NotImplementedException();
+            int userId = 1;
+            return await _repository.GetNotes(userId);
         }
 
         public async Task<Note> UpdateNote(int id, Note note)
