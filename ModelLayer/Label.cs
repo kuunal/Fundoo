@@ -8,7 +8,6 @@ namespace ModelLayer
         [Key]
         public int LabelId { get; set; }
 
-        [ForeignKey("Note")]
         public int NoteId { get; set; }
 
         public string Labels { get; set; }
