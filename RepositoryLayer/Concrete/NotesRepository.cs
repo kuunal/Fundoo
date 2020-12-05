@@ -7,16 +7,24 @@ using System.Threading.Tasks;
 
 namespace RepositoryLayer.Concrete
 {
-    class NotesRepository : INotesRepository
+    public class NotesRepository : INotesRepository
     {
-        public Task<Note> AddNote()
+        private readonly FundooDbContext _context;
+        public NotesRepository(FundooDbContext context) 
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task<Note> DeleteNote()
+        public async Task<Note> AddNote(Note note)
         {
-            throw new NotImplementedException();
+            var result = await _context.Notes.AddAsync(note);
+            await _context.SaveChangesAsync();
+            return result.Entity;
+        }
+
+        public async Task<Note> DeleteNote(int id)
+        {
+            return _context.Notes.Remove(await _context.Notes.FindAsync(id));
         }
 
         public Task<Note> GetNote(int id)
@@ -29,7 +37,7 @@ namespace RepositoryLayer.Concrete
             throw new NotImplementedException();
         }
 
-        public Task<Note> UpdateNote()
+        public Task<Note> UpdateNote(int id, Note note)
         {
             throw new NotImplementedException();
         }
