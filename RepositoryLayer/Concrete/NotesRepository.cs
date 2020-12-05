@@ -1,7 +1,9 @@
-﻿using ModelLayer;
+﻿using Microsoft.EntityFrameworkCore;
+using ModelLayer;
 using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,7 +26,7 @@ namespace RepositoryLayer.Concrete
 
         public async Task<Note> DeleteNote(int id)
         {
-            return _context.Notes.Remove(await _context.Notes.FindAsync(id));
+            throw new NotImplementedException();
         }
 
         public Task<Note> GetNote(int id)
@@ -32,9 +34,10 @@ namespace RepositoryLayer.Concrete
             throw new NotImplementedException();
         }
 
-        public Task<Note> GetNote()
+        public async Task<List<Note>> GetNotes(int userId)
         {
-            throw new NotImplementedException();
+            return await _context.Notes
+                         .Where(note => note.Owner.AccountId == userId).ToListAsync();
         }
 
         public Task<Note> UpdateNote(int id, Note note)
