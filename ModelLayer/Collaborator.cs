@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ModelLayer
 {
@@ -6,9 +9,13 @@ namespace ModelLayer
     {
         [Key]
         public int Id { get; set; }
-            
-        public Account AccountId { get; set; }
 
-        public Note NoteId { get; set; }
+        public int AccountId { get; set; }
+
+        public int NoteId { get; set; }
+
+        public virtual Account Account { get; set; }
+
+        public virtual Note Note { get; set; }
     }
 }
