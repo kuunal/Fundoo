@@ -29,6 +29,8 @@ namespace Fundoo
             );
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<INotesRepository, NotesRepository>();
+            services.AddScoped<INotesService, NotesService>();
             services.AddControllers();
         }
 
@@ -39,7 +41,7 @@ namespace Fundoo
             {
                 app.UseDeveloperExceptionPage();
             }
-
+             
             app.UseHttpsRedirection();
 
             app.UseRouting();
