@@ -17,6 +17,14 @@ namespace RepositoryLayer.Concrete
         {
             _context = context;
         }
+
+        public async Task<Account> AddAccount(Account account)
+        {
+            var result = await _context.Accounts.AddAsync(account);
+            await _context.SaveChangesAsync();
+            return result.Entity;
+        }
+
         public async Task<List<Account>> Get()
         {
             return await _context.Accounts.ToListAsync();
