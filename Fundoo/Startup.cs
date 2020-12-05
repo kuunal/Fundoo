@@ -24,7 +24,7 @@ namespace Fundoo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<FundooDbContext>(options => 
+            services.AddDbContextPool<FundooDbContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("ConnectionString"))
             );
             services.AddScoped<IAccountRepository, AccountRepository>();
