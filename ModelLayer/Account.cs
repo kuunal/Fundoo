@@ -36,5 +36,9 @@ namespace ModelLayer
         [Column(TypeName = "BigInt")]
         public long PhoneNumber { get; set; }
 
+        public virtual Note Note { get; set; }
+
+        public virtual ICollection<Collaborator> Collaborators{ get; set; }
+
     }
 }
