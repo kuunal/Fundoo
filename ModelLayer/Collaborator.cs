@@ -10,9 +10,9 @@ namespace ModelLayer
         [Key]
         public int Id { get; set; }
 
-        public int AccountId { get; set; }
+        public int?  AccountId { get; set; }
 
-        public int NoteId { get; set; }
+        public int? NoteId { get; set; }
 
         public virtual Account Account { get; set; }
 
