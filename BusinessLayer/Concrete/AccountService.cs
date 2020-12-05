@@ -21,5 +21,11 @@ namespace BusinessLayer.Concrete
         {
             return await _repository.Get();
         }
+        
+
+        public async Task<Account> AddAccount(Account account)
+        {
+            return await _repository.AddAccount(account);
+        }
     }
 }
