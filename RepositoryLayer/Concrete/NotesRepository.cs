@@ -37,7 +37,7 @@ namespace RepositoryLayer.Concrete
         public async Task<List<Note>> GetNotes(int userId)
         {
             return await _context.Notes
-                         .Where(note => note.Owner.AccountId == userId).ToListAsync();
+                         .Where(note => note.Account.AccountId == userId).ToListAsync();
         }
 
         public Task<Note> UpdateNote(int id, Note note)

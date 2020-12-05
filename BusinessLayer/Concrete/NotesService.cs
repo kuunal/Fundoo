@@ -2,6 +2,7 @@
 using ModelLayer;
 using RepositoryLayer.Concrete;
 using RepositoryLayer.Interface;
+using System;
 using System.Threading.Tasks;
 
 namespace BusinessLayer.Concrete
@@ -18,24 +19,24 @@ namespace BusinessLayer.Concrete
             return await _repository.AddNote(note);
         }
 
-        public Task<Note> DeleteNote(int id)
+        public async Task<Note> DeleteNote(int id)
         {
-            return await _repository.DeleteNote();
+            return await _repository.DeleteNote(id);
         }
 
-        public Task<Note> GetNote(int id)
+        public async Task<Note> GetNote(int id)
         {
             return await _repository.GetNote(id);
         }
 
-        public Task<Note> GetNote()
+        public async Task<Note> GetNote()
         {
-            return await _repository.GetNote();
+            throw new NotImplementedException();
         }
 
-        public Task<Note> UpdateNote(int id, Note note)
+        public async Task<Note> UpdateNote(int id, Note note)
         {
-            await _repository.UpdateNote(int id, Note note);
+            return await _repository.UpdateNote(id, note);
         }
     }
 }
