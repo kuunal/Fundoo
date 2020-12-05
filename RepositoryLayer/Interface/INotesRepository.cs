@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace RepositoryLayer.Interface
 {
-    interface INotesRepository
+    public interface INotesRepository
     {
-        Task<Note> AddNote();
-        Task<Note> DeleteNote();
+        Task<Note> AddNote(Note note);
+        Task<Note> DeleteNote(int id);
         Task<Note> GetNote(int id);
         Task<Note> GetNote();
-        Task<Note> UpdateNote();
+        Task<Note> UpdateNote(int id, Note note);
 
     }
 }
