@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.Interface
 {
-    public interface INoteService
+    public interface INotesService
     {
-        Task<Note> AddNote();
-        Task<Note> DeleteNote();
+        Task<Note> AddNote(Note note);
+        Task<Note> DeleteNote(int id);
         Task<Note> GetNote(int id);
         Task<Note> GetNote();
-        Task<Note> UpdateNote();
+        Task<Note> UpdateNote(int id, Note note);
     }
 }
