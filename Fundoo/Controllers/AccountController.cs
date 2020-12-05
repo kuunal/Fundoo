@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Fundoo.Controllers
 {
     [ApiController]
-    [Route("/Account")]
+    [Route("account/")]
     public class AccountController : ControllerBase
     {
         private IAccountService _service;
@@ -24,7 +24,9 @@ namespace Fundoo.Controllers
             return Ok(await _service.Get());
         }
 
-        public async Task<IActionResult> AddAccount(Account account)
+        [HttpPost]
+        [Route("create")]
+        public async Task<IActionResult> AddAccount([FromBody] Account account)
         {
             Account createdAccount = await _service.AddAccount(account);
             if (createdAccount == null)
