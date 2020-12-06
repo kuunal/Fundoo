@@ -20,7 +20,7 @@ namespace Fundoo.Controllers
             _service = services;
         }
 
-        [HttpGet("get")]
+        [HttpGet()]
         [TokenAuthenticationFilter]
         public async Task<IActionResult> Index()
         {
@@ -42,7 +42,7 @@ namespace Fundoo.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] string id, string password)
+        public async Task<IActionResult> Login(string id, string password)
         {
             if (id == null || password == null)
             {
