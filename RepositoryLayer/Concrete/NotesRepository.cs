@@ -20,13 +20,16 @@ namespace RepositoryLayer.Concrete
         public async Task<Note> AddNote(Note note)
         {
             var result = await _context.Notes.AddAsync(note);
-            await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             return result.Entity;
         }
 
         public async Task<Note> DeleteNote(int id)
         {
-            throw new NotImplementedException();
+            Note note = await _context.Notes.FindAsync(id);
+            var deletedNote = _context.Notes.Remove(note);
+            await _context.SaveChangesAsync();
+            return deletedNote.Entity;
         }
 
         public Task<Note> GetNote(int id)
