@@ -1,10 +1,6 @@
 ﻿using BusinessLayer.Interface;
-using Greeting.TokenAuthentication;
 using ModelLayer;
 using RepositoryLayer.Interface;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using TokenAuthentication;
 
@@ -12,13 +8,13 @@ namespace BusinessLayer.Concrete
 {
     public class AccountService : IAccountService
     {
-        private readonly TokenManager _tokenManager; 
+        private readonly ITokenManager _tokenManager; 
         private IAccountRepository _repository;
 
         public AccountService(IAccountRepository repository, ITokenManager _tokenManager)
         {
             _repository = repository;
-            _tokenManager = _tokenManager;
+            this._tokenManager = _tokenManager;
         }
 
         public async Task<Account> Get(int id)
