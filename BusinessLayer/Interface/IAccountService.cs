@@ -6,8 +6,8 @@ namespace BusinessLayer.Interface
 {
     public interface IAccountService
     {
-        Task<List<Account>> Get();
+        Task<Account> Get(int id);
         Task<Account> AddAccount(Account account);
-
+        Task<Account> Authenticate(string id, string password);
     }
 }
