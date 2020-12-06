@@ -29,6 +29,11 @@ namespace BusinessLayer.Concrete
 
         public async Task<Account> AddAccount(Account account)
         {
+            Account user = await _repository.Get(account.Email);
+            if (user != null)
+            {
+                return null;
+            }
             Account encryptedPasswordAccount = new Account
             {
                 DateOfBirth = account.DateOfBirth,
