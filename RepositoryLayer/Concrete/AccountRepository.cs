@@ -28,6 +28,12 @@ namespace RepositoryLayer.Concrete
         public async Task<Account> Get(string email)
         {
             return await _context.Accounts.FirstOrDefaultAsync(account=>account.Email == email);
+
+        }
+
+        public async Task<Account> Get(int id)
+        {
+            return await _context.Accounts.FirstOrDefaultAsync(account => account.AccountId== id);
         }
     }
 }

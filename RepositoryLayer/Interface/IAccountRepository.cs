@@ -6,7 +6,9 @@ namespace RepositoryLayer.Interface
 {
     public interface IAccountRepository
     {
-        Task<List<Account>> Get();
+        Task<Account> Get(string id);
+        Task<Account> Get(int id);
+
 
         Task<Account> AddAccount(Account account);
     }
