@@ -1,5 +1,6 @@
 using BusinessLayer.Concrete;
 using BusinessLayer.Interface;
+using Fundoo.Utilities;
 using Greeting.TokenAuthentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -35,6 +36,7 @@ namespace Fundoo
             services.AddScoped<INotesRepository, NotesRepository>();
             services.AddScoped<INotesService, NotesService>();
             services.AddControllers();
+            services.AddSwagger();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +50,8 @@ namespace Fundoo
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCustomSwagger();
 
             app.UseAuthorization();
 
