@@ -19,7 +19,7 @@ namespace Greeting.TokenAuthentication
                 try
                 {
                     var claimPrinciple = _tokenManager.Decode(token.ToString().Split(" ")[1]);
-                    context.HttpContext.Items["userId"] = claimPrinciple.Claims.ToList()[0];
+                    context.HttpContext.Items["userId"] = claimPrinciple.Claims.ToList()[0].Value;
 
                 }
                 catch(Exception)
