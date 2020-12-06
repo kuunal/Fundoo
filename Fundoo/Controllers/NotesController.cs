@@ -42,5 +42,18 @@ namespace Fundoo.Controllers
             }
             return Ok(note);
         }
+    
+        [HttpDelete]
+        [Route("delete/{id}")]
+        public async Task<IActionResult> DeleteNoteAsync(int id)
+        {
+            var result = await _service.DeleteNote(id);
+            if (result == null)
+            {
+                return BadRequest("No such note Exists!");
+            }
+            return Ok("Deleted");
+        }
+
     }
 }
