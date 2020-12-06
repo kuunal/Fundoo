@@ -25,9 +25,9 @@ namespace RepositoryLayer.Concrete
             return result.Entity;
         }
 
-        public async Task<List<Account>> Get()
+        public async Task<Account> Get(string email)
         {
-            return await _context.Accounts.ToListAsync();
+            return await _context.Accounts.FirstOrDefaultAsync(account=>account.Email == email);
         }
     }
 }
