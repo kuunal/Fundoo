@@ -21,14 +21,14 @@ namespace BusinessLayer.Concrete
             return await _repository.AddNote(note);
         }
 
-        public async Task<Note> DeleteNote(int id)
+        public async Task<Note> DeleteNote(int noteId, int userId)
         {
-            return await _repository.DeleteNote(id);
+            return await _repository.DeleteNote(noteId, userId);
         }
 
-        public async Task<Note> GetNote(int id, int userid)
+        public async Task<Note> GetNote(int noteId, int userId)
         {
-            return await _repository.GetNote(id);
+            return await _repository.GetNote(noteId, userId);
         }
 
         public async Task<List<Note>> GetNotes(int userid)
@@ -36,9 +36,9 @@ namespace BusinessLayer.Concrete
             return await _repository.GetNotes(userid);
         }
 
-        public async Task<Note> UpdateNote(int id, Note note)
+        public async Task<Note> UpdateNote(int userId, int noteId, Note note)
         {
-            return await _repository.UpdateNote(id, note);
+            return await _repository.UpdateNote(userId, noteId, note);
         }
     }
 }
