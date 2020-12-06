@@ -17,15 +17,29 @@ namespace BusinessLayer.Concrete
             _repository = repository;
         }
 
-        public async Task<List<Account>> Get()
+        public async Task<Account> Get(int id)
         {
-            return await _repository.Get();
+            return await _repository.Get(id);
         }
         
 
         public async Task<Account> AddAccount(Account account)
         {
-            return await _repository.AddAccount(account);
+            Account encryptedPasswordAccount = new Account
+            {
+                DateOfBirth = account.DateOfBirth,
+                Email = account.Email,
+                FirstName = account.FirstName,
+                LastName = account.LastName,
+                Password = BCrypt.Net.BCrypt.HashPassword(account.Password),
+                PhoneNumber = account.PhoneNumber
+            };
+            return await _repository.AddAccount(encryptedPasswordAccount);
+        }
+
+        public Task<Account> Authenticate(string email, string password)
+        {
+            throw new NotImplementedException();
         }
     }
 }
