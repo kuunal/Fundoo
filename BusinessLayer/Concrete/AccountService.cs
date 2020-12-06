@@ -1,20 +1,24 @@
 ﻿using BusinessLayer.Interface;
+using Greeting.TokenAuthentication;
 using ModelLayer;
 using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using TokenAuthentication;
 
 namespace BusinessLayer.Concrete
 {
     public class AccountService : IAccountService
     {
+        private readonly TokenManager _tokenManager; 
         private IAccountRepository _repository;
 
-        public AccountService(IAccountRepository repository)
+        public AccountService(IAccountRepository repository, ITokenManager _tokenManager)
         {
             _repository = repository;
+            _tokenManager = _tokenManager;
         }
 
         public async Task<Account> Get(int id)
@@ -37,9 +41,15 @@ namespace BusinessLayer.Concrete
             return await _repository.AddAccount(encryptedPasswordAccount);
         }
 
-        public Task<Account> Authenticate(string email, string password)
+        public async Task<(Account, string)> Authenticate(string email, string password)
         {
-            throw new NotImplementedException();
+            Account user = await _repository.Get(email);
+            if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
+            {
+                return (null, null);
+            }
+            string token = _tokenManager.Encode(user);
+            return (user, token);
         }
     }
 }
