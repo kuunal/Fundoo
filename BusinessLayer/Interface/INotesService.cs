@@ -9,9 +9,9 @@ namespace BusinessLayer.Interface
     public interface INotesService
     {
         Task<Note> AddNote(Note note, int userid);
-        Task<Note> DeleteNote(int id);
-        Task<Note> GetNote(int id, int userid);
+        Task<Note> DeleteNote(int noteId, int userid);
+        Task<Note> GetNote(int id, int userId);
         Task<List<Note>> GetNotes(int userid);
-        Task<Note> UpdateNote(int id, Note note);
+        Task<Note> UpdateNote(int userId, int noteId, Note note);
     }
 }
