@@ -35,11 +35,13 @@ namespace Fundoo.Controllers
             Account createdAccount = await _service.AddAccount(account);
             if (createdAccount == null)
             {
-                return BadRequest("Error");
+                return BadRequest("Account already exists");
             }
             return Ok(createdAccount);
         }
 
+        [HttpPost]
+        [Route("login")]
         public async Task<IActionResult> Login([FromBody] string id, string password)
         {
             if (id == null || password == null)

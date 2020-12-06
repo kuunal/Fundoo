@@ -8,6 +8,6 @@ namespace BusinessLayer.Interface
     {
         Task<Account> Get(int id);
         Task<Account> AddAccount(Account account);
-        Task<Account> Authenticate(string id, string password);
+        Task<(Account, string)> Authenticate(string id, string password);
     }
 }
