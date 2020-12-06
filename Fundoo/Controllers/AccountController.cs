@@ -1,4 +1,5 @@
 ﻿using BusinessLayer.Interface;
+using Greeting.TokenAuthentication;
 using Microsoft.AspNetCore.Mvc;
 using ModelLayer;
 using System;
@@ -19,9 +20,12 @@ namespace Fundoo.Controllers
             _service = services;
         }
 
+        [HttpGet("get")]
+        [TokenAuthenticationFilter]
         public async Task<IActionResult> Index()
         {
-            return Ok(await _service.Get());
+            int id = Convert.ToInt32(HttpContext.Items["userId"]);
+            return Ok(await _service.Get(id));
         }
 
         [HttpPost]
@@ -42,8 +46,8 @@ namespace Fundoo.Controllers
             {
                 return BadRequest("Invalid inputs");
             }
-            Account account = await _service.Authenticate(id, password);
-            return Ok();
+            var (user, token) = await _service.Authenticate(id, password);
+            return Ok(new { user = user, token = token });
         }
 
     }
