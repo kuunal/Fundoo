@@ -24,8 +24,6 @@ namespace ModelLayer
         public string Email { get; set; }
         
         [Required]
-        [MaxLength(32)]
-        [MinLength(8)]
         public string Password { get; set; }
         
         [Required]
