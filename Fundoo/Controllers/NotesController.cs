@@ -1,4 +1,5 @@
 ﻿using BusinessLayer.Interface;
+using Greeting.TokenAuthentication;
 using Microsoft.AspNetCore.Mvc;
 using ModelLayer;
 using System;
@@ -21,9 +22,11 @@ namespace Fundoo.Controllers
 
         [HttpGet]
         [Route("get")]
+        [TokenAuthenticationFilter]
         public async Task<IActionResult> GetNotesAsync()
         {
-            List<Note> notes = await _service.GetNotes();
+            int userid = Convert.ToInt32(HttpContext.Items["userId"]);
+            List<Note> notes = await _service.GetNotes(userid);
             if (notes == null)
             {
                 return Ok("No notes created");
@@ -33,9 +36,11 @@ namespace Fundoo.Controllers
 
         [HttpPost]
         [Route("add")]
+        [TokenAuthenticationFilter]
         public async Task<IActionResult> AddNoteASync(Note note)
         {
-            Note addednote = await _service.AddNote(note);
+            int userid = Convert.ToInt32(HttpContext.Items["userId"]);
+            Note addednote = await _service.AddNote(note, userid);
             if (addednote == null)
             {
                 return BadRequest();
@@ -45,13 +50,14 @@ namespace Fundoo.Controllers
     
         [HttpDelete]
         [Route("delete/{id}")]
+        [TokenAuthenticationFilter]
         public async Task<IActionResult> DeleteNoteAsync(int id)
         {
             var result = await _service.DeleteNote(id);
             if (result == null)
             {
                 return BadRequest("No such note Exists!");
-            }
+            }    
             return Ok("Deleted");
         }
 
