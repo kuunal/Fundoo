@@ -1,5 +1,6 @@
 using BusinessLayer.Concrete;
 using BusinessLayer.Interface;
+using Greeting.TokenAuthentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using ModelLayer;
 using RepositoryLayer.Concrete;
 using RepositoryLayer.Interface;
+using TokenAuthentication;
 
 namespace Fundoo
 {
@@ -27,6 +29,7 @@ namespace Fundoo
             services.AddDbContextPool<FundooDbContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("ConnectionString"))
             );
+            services.AddSingleton<ITokenManager, TokenManager>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<INotesRepository, NotesRepository>();
