@@ -17,6 +17,7 @@ namespace BusinessLayer.Concrete
         }
         public async Task<Note> AddNote(Note note, int userid)
         {
+            note.AccountId = userid;
             return await _repository.AddNote(note);
         }
 

@@ -37,7 +37,7 @@ namespace Fundoo.Controllers
         [HttpPost]
         [Route("add")]
         [TokenAuthenticationFilter]
-        public async Task<IActionResult> AddNoteASync(Note note)
+        public async Task<IActionResult> AddNoteASync([FromBody] Note note)
         {
             int userid = Convert.ToInt32(HttpContext.Items["userId"]);
             Note addednote = await _service.AddNote(note, userid);
