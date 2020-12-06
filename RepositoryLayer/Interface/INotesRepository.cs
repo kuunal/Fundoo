@@ -9,10 +9,10 @@ namespace RepositoryLayer.Interface
     public interface INotesRepository
     {
         Task<Note> AddNote(Note note);
-        Task<Note> DeleteNote(int id);
-        Task<Note> GetNote(int id);
+        Task<Note> DeleteNote(int noteId, int userId);
+        Task<Note> GetNote(int noteId, int userId);
         Task<List<Note>> GetNotes(int userId);  
-        Task<Note> UpdateNote(int id, Note note);
+        Task<Note> UpdateNote(int userId, int noteid, Note note);
 
     }
 }
