@@ -35,5 +35,16 @@ namespace Fundoo.Controllers
             }
             return Ok(createdAccount);
         }
+
+        public async Task<IActionResult> Login([FromBody] string id, string password)
+        {
+            if (id == null || password == null)
+            {
+                return BadRequest("Invalid inputs");
+            }
+            Account account = await _service.Authenticate(id, password);
+            return Ok();
+        }
+
     }
 }
