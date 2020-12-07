@@ -15,7 +15,8 @@ namespace ModelLayer
         {
             modelBuilder.Entity<Account>().HasMany(acc => acc.Collaborators)
                 .WithOne(collaborator => collaborator.Account)
-                .HasForeignKey(c=>c.AccountId)
+                .HasForeignKey(c => c.email)
+                .HasPrincipalKey(acc => acc.Email)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
 
