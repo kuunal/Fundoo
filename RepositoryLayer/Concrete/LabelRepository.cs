@@ -3,6 +3,7 @@ using ModelLayer;
 using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,14 +19,31 @@ namespace RepositoryLayer.Concrete
         }
         public async Task<Label> AddLabel(Label label, int userId)
         {
-            Note noteOwner = await _context.Notes.FirstOrDefaultAsync(note => note.AccountId == userId);
+            Note noteOwner = await _context.Notes
+                                .FirstOrDefaultAsync(note => note.NoteId == label.NoteId 
+                                                            && note.AccountId == userId);
             if (noteOwner == null)
             {
                 throw new Exception("No such note exists!");
             }
             var result = await _context.Labels.AddAsync(label);
             await _context.SaveChangesAsync();
-            return result.Entity;s
+            return result.Entity;
+        }
+
+        public async Task<List<Label>> GetLabelsAsync(int userId)
+        {
+
+            return await _context.Labels.Join(
+                _context.Notes,
+                labels => labels.NoteId,
+                notes => (notes.AccountId == userId)? notes.NoteId : -1,
+                (labels, notes) => new Label
+                {
+                    LabelId = labels.LabelId,
+                    NoteId = labels.NoteId,
+                    Labels = labels.Labels
+                }).ToListAsync();
         }
     }
 }
