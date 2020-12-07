@@ -10,7 +10,7 @@ namespace ModelLayer
         [Key]
         public int Id { get; set; }
 
-        public int  AccountId { get; set; }
+        public string  email { get; set; }
 
         public int NoteId { get; set; }
 
