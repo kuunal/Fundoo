@@ -45,5 +45,27 @@ namespace RepositoryLayer.Concrete
                     Labels = labels.Labels
                 }).ToListAsync();
         }
+        public async Task<Label> RemoveLabelAsync(int userId, int labelId)
+        {
+            Label label = await _context.Labels.FindAsync(labelId);
+            if (label == null)
+            {
+                throw new Exception("No such label exist!");
+            }
+            Note ownerNote = await _context.Notes.FirstOrDefaultAsync(note=>note.AccountId == userId
+                                                                        && note.NoteId == label.NoteId);
+            if (ownerNote == null)
+            {
+                throw new Exception("No such note exists!");
+            }
+            return await Task.Run(async () =>
+            {
+
+            var result = _context.Labels.Remove(label);
+                await _context.SaveChangesAsync();
+                return result.Entity;
+            });
+        }
+
     }
 }

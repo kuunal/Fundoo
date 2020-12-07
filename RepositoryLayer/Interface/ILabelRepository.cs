@@ -10,6 +10,7 @@ namespace RepositoryLayer.Interface
     {
         Task<Label> AddLabel(Label label, int userId);
         Task<List<Label>> GetLabelsAsync(int userId);
+        Task<Label> RemoveLabelAsync(int userId, int labelId);
 
     }
 }
