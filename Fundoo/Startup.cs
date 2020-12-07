@@ -35,6 +35,8 @@ namespace Fundoo
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<INotesRepository, NotesRepository>();
             services.AddScoped<INotesService, NotesService>();
+            services.AddScoped<ICollaboratorRepository, CollaboratorRepository>();
+            services.AddScoped<ICollaboratorService, CollaboratorService>();
             services.AddControllers();
             services.AddSwagger();
         }
