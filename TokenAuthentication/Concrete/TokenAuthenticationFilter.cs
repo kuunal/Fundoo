@@ -19,10 +19,12 @@ namespace Greeting.TokenAuthentication
                 try
                 {
                     var claimPrinciple = _tokenManager.Decode(token.ToString().Split(" ")[1]);
-                    context.HttpContext.Items["userId"] = claimPrinciple.Claims.ToList()[0].Value;
+                    var claimList = claimPrinciple.Claims.ToList();
+                    context.HttpContext.Items["userId"] = claimList[0].Value;
+                    context.HttpContext.Items["email"] = claimList[1].Value;
 
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                     context.ModelState.AddModelError("Unauthorized", "Invalid token");
                 }

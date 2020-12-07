@@ -25,7 +25,8 @@ namespace Greeting.TokenAuthentication
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[] { 
-                    new Claim(ClaimTypes.UserData, account.AccountId.ToString())
+                    new Claim(ClaimTypes.UserData, account.AccountId.ToString()),
+                    new Claim(ClaimTypes.Email, account.Email)  
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(1),
                 SigningCredentials = new SigningCredentials(
