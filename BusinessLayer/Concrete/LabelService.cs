@@ -1,6 +1,7 @@
 ﻿using BusinessLayer.Interface;
 using ModelLayer;
 using RepositoryLayer.Interface;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BusinessLayer.Concrete
@@ -18,6 +19,11 @@ namespace BusinessLayer.Concrete
         public Task<Label> AddLabelAsync(int userId, Label label)
         {
             return _repository.AddLabel(label, userId);
+        }
+
+        public Task<List<Label>> GetLabelAsync(int userId)
+        {
+            return _repository.GetLabelsAsync(userId);
         }
     }
 }
