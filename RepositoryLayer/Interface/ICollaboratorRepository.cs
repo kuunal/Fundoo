@@ -5,6 +5,6 @@ namespace RepositoryLayer.Interface
 {
     public interface ICollaboratorRepository
     {
-        Task<Collaborator> AddCollaborator(Collaborator collaborator);
+        Task<Collaborator> AddCollaborator(string email, Collaborator collaborator);
     }
 }
