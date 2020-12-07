@@ -21,12 +21,28 @@ namespace BusinessLayer.Concrete
         }
         public async Task<Collaborator> AddCollaborator(string email, int userId, Collaborator collaborator)
         {
-            Note note = await _noteRepository.GetNote(collaborator.NoteId, userId);
-            if (note == null)
+            try
             {
-                return null;
+                Note note = await _noteRepository.GetNote(collaborator.NoteId, userId);
+                if (note == null)
+                {
+                    return null;
+                }
+                return await _collaboratorRepository.AddCollaborator(email, collaborator);
+            }catch(Exception e)
+            {
+                throw new Exception(e.Message);
             }
-            return await _collaboratorRepository.AddCollaborator(email, collaborator);
+        }
+
+        public async Task<Collaborator> RemoveCollaborator(int collaboratorId, int userId)
+        {
+            return await _collaboratorRepository.RemoveCollaborator(collaboratorId, userId);
+        }
+
+        public async Task<List<Collaborator>> GetCollaborators(int userId)
+        {
+            return await _collaboratorRepository.GetCollaboratorAsync(userId);
         }
     }
 }
