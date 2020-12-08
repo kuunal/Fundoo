@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CustomException;
+using Microsoft.EntityFrameworkCore;
 using ModelLayer;
 using RepositoryLayer.Interface;
 using System;
@@ -50,13 +51,13 @@ namespace RepositoryLayer.Concrete
             Label label = await _context.Labels.FindAsync(labelId);
             if (label == null)
             {
-                throw new Exception("No such label exist!");
+                throw new FundooException("No such label exist!");
             }
             Note ownerNote = await _context.Notes.FirstOrDefaultAsync(note=>note.AccountId == userId
                                                                         && note.NoteId == label.NoteId);
             if (ownerNote == null)
             {
-                throw new Exception("No such note exists!");
+                throw new FundooException("No such note exists!");
             }
             return await Task.Run(async () =>
             {

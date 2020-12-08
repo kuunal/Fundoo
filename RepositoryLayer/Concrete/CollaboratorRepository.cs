@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CustomException;
+using Microsoft.EntityFrameworkCore;
 using ModelLayer;
 using RepositoryLayer.Interface;
 using System;
@@ -26,7 +27,7 @@ namespace RepositoryLayer.Concrete
                                                 .FirstOrDefaultAsync(collaborator=>collaborator.email == email);
                 if (collaboratorWithSameUser != null)
                 {
-                    return null;
+                    throw new FundooException("Already added as collaborator");
                 }
 
                 var result = await _context.Collaborators.AddAsync(collaborator);
@@ -35,7 +36,7 @@ namespace RepositoryLayer.Concrete
             }
             catch (Microsoft.EntityFrameworkCore.DbUpdateException)
             {
-                throw new Exception("No such user or email exists!");
+                throw new FundooException("No such user or note exists!");
             }
         }
 
@@ -47,11 +48,11 @@ namespace RepositoryLayer.Concrete
                                             && note.NoteId == isCollaborator.NoteId);
             if (noteOwner == null)
             {
-                throw new Exception("No such note");
+                throw new FundooException("No such note");
             }
             if (isCollaborator == null)
             {
-                throw new Exception("No such collaborator");
+                throw new FundooException("No such collaborator");
             }
             return await Task.Run(async () =>
             {
