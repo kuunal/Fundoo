@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ModelLayer;
 using ModelLayer.DTOs.AccountDto;
+using ModelLayer.DTOs.CollaboratorDTO;
 using ModelLayer.DTOs.NoteDTO;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,9 @@ namespace Fundoo
 
             CreateMap<Note, NoteResponseDto>();
             CreateMap<NoteRequestDto, Note>();
+
+            CreateMap<Collaborator, CollaboratorResponseDto>();
+            CreateMap<CollaboratorRequestDto, Collaborator>();
         }
     }
 }
