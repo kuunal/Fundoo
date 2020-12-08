@@ -7,10 +7,17 @@ namespace CustomException
 {
     public class FundooException : Exception
     {
-        string message;
-        public FundooException(string message) : base(message)
+        public string Message;
+        public int StatusCode;
+        public FundooException(string message, int statusCode=400) : base(message)
         {
-            this.message = message;
+            this.Message = message;
+            this.StatusCode = statusCode;
+        }
+
+        public override string ToString()
+        {
+            return StatusCode.ToString();
         }
     }
 }

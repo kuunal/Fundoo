@@ -21,7 +21,7 @@ namespace Fundoo.Controllers
             string message = exception.Error.Message;
             int statusCode = exception.Error.GetType().Name switch
             {
-                "FundooException" => (int)HttpStatusCode.BadRequest,
+                "FundooException" =>  Convert.ToInt32(exception.Error.ToString()),
                 _ => (int)HttpStatusCode.InternalServerError
             };
             return new JsonResult(new { detail= message, statusCode= statusCode });
