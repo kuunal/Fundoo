@@ -1,7 +1,10 @@
-﻿using BusinessLayer.Interface;
+﻿using AutoMapper;
+using BusinessLayer.Interface;
 using ModelLayer;
+using ModelLayer.DTOs.LabelDTO;
 using RepositoryLayer.Interface;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BusinessLayer.Concrete
@@ -10,25 +13,30 @@ namespace BusinessLayer.Concrete
     {
 
         private readonly ILabelRepository _repository;
+        private readonly IMapper _mapper;
 
-        public LabelService(ILabelRepository repository)
+        public LabelService(ILabelRepository repository
+            , IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
-        public Task<Label> AddLabelAsync(int userId, Label label)
+        public async Task<LabelResponseDto> AddLabelAsync(int userId, LabelRequestDto label)
         {
-            return _repository.AddLabel(label, userId);
+            Label labelModel = _mapper.Map<Label>(label);
+            return _mapper.Map<LabelResponseDto>(await _repository.AddLabel(labelModel, userId));
         }
 
-        public Task<List<Label>> GetLabelAsync(int userId)
+        public async Task<List<LabelResponseDto>> GetLabelAsync(int userId)
         {
-            return _repository.GetLabelsAsync(userId);
+            return (await _repository.GetLabelsAsync(userId))
+                .Select(label=>_mapper.Map<LabelResponseDto>(label)).ToList();
         }
 
-        public Task<Label> RemoveLabelAsync(int userId, int labelId)
+        public async Task<LabelResponseDto> RemoveLabelAsync(int userId, int labelId)
         {
-            return _repository.RemoveLabelAsync(userId, labelId);
+            return _mapper.Map<LabelResponseDto>(await _repository.RemoveLabelAsync(userId, labelId));
         }
     }
 }
