@@ -9,5 +9,8 @@ namespace BusinessLayer.Interface
         Task<Label> AddLabelAsync(int userId, Label label);
 
         Task<List<Label>> GetLabelAsync(int userId);
+
+        Task<Label> RemoveLabelAsync(int userId, int labelId);
+
     }
 }
