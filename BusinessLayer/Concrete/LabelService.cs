@@ -25,5 +25,10 @@ namespace BusinessLayer.Concrete
         {
             return _repository.GetLabelsAsync(userId);
         }
+
+        public Task<Label> RemoveLabelAsync(int userId, int labelId)
+        {
+            return _repository.RemoveLabelAsync(userId, labelId);
+        }
     }
 }
