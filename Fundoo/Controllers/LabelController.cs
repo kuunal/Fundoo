@@ -2,6 +2,7 @@
 using Greeting.TokenAuthentication;
 using Microsoft.AspNetCore.Mvc;
 using ModelLayer;
+using ModelLayer.DTOs.LabelDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,10 +23,10 @@ namespace Fundoo.Controllers
 
         [HttpPost]
         [TokenAuthenticationFilter]
-        public async Task<IActionResult> AddLabelAsync([FromBody] Label label)
+        public async Task<IActionResult> AddLabelAsync([FromBody] LabelRequestDto label)
         {
             int userId = Convert.ToInt32(HttpContext.Items["userId"]);
-            Label createdLabel = await _service.AddLabelAsync(userId, label);
+            var createdLabel = await _service.AddLabelAsync(userId, label);
             return Ok(createdLabel);
         }
 
@@ -35,7 +36,7 @@ namespace Fundoo.Controllers
         public async Task<IActionResult> GetLabelsAsyc()
         {
             int userId = Convert.ToInt32(HttpContext.Items["userId"]);
-            List<Label> labels = await _service.GetLabelAsync(userId);
+            var labels = await _service.GetLabelAsync(userId);
             return Ok(labels);
         }
 
@@ -45,7 +46,7 @@ namespace Fundoo.Controllers
         public async Task<IActionResult> RemoveLabelAsync(int labelId)
         {
             int userId = Convert.ToInt32(HttpContext.Items["userId"]);
-            Label label = await _service.RemoveLabelAsync(userId, labelId);
+            var label = await _service.RemoveLabelAsync(userId, labelId);
             return Ok(label);
         }
     }

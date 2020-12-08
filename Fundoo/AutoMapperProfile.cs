@@ -2,6 +2,7 @@
 using ModelLayer;
 using ModelLayer.DTOs.AccountDto;
 using ModelLayer.DTOs.CollaboratorDTO;
+using ModelLayer.DTOs.LabelDTO;
 using ModelLayer.DTOs.NoteDTO;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,9 @@ namespace Fundoo
 
             CreateMap<Collaborator, CollaboratorResponseDto>();
             CreateMap<CollaboratorRequestDto, Collaborator>();
+
+            CreateMap<Label, LabelResponseDto>();
+            CreateMap<LabelRequestDto, Label>();
         }
     }
 }
