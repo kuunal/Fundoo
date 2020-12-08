@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BusinessLayer.Interface;
+using CustomException;
 using ModelLayer;
 using ModelLayer.DTOs.AccountDto;
 using RepositoryLayer.Interface;
@@ -51,7 +52,7 @@ namespace BusinessLayer.Concrete
             Account user = await _repository.Get(email);
             if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
-                return (null, null);
+                throw new FundooException("Login Failed");
             }
             string token = _tokenManager.Encode(user);
 
