@@ -30,12 +30,23 @@ namespace Fundoo.Controllers
         }
 
         [HttpGet]
+        [Route("get")]
         [TokenAuthenticationFilter]
         public async Task<IActionResult> GetLabelsAsyc()
         {
             int userId = Convert.ToInt32(HttpContext.Items["userId"]);
             List<Label> labels = await _service.GetLabelAsync(userId);
             return Ok(labels);
+        }
+
+        [HttpDelete]
+        [Route("delete/{labelId}")]
+        [TokenAuthenticationFilter]
+        public async Task<IActionResult> RemoveLabelAsync(int labelId)
+        {
+            int userId = Convert.ToInt32(HttpContext.Items["userId"]);
+            Label label = await _service.RemoveLabelAsync(userId, labelId);
+            return Ok(label);
         }
     }
 }
