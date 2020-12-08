@@ -2,6 +2,7 @@
 using Greeting.TokenAuthentication;
 using Microsoft.AspNetCore.Mvc;
 using ModelLayer;
+using ModelLayer.DTOs.NoteDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace Fundoo.Controllers
         public async Task<IActionResult> GetNotesAsync()
         {
             int userId = Convert.ToInt32(HttpContext.Items["userId"]);
-            List<Note> notes = await _service.GetNotes(userId);
+            List<NoteResponseDto> notes = await _service.GetNotes(userId);
             if (notes == null)
             {
                 return Ok("No notes created");
@@ -40,7 +41,7 @@ namespace Fundoo.Controllers
         public async Task<IActionResult> RetrieveNoteAsync(int noteId)
         {
             int userId = Convert.ToInt32(HttpContext.Items["userId"]);
-            Note note = await _service.GetNote(noteId, userId);
+            var note = await _service.GetNote(noteId, userId);
             if (note==null)
             {
                 return BadRequest("No such note exists!");
@@ -51,10 +52,10 @@ namespace Fundoo.Controllers
         [HttpPost]
         [Route("add")]
         [TokenAuthenticationFilter]
-        public async Task<IActionResult> AddNoteASync([FromBody] Note note)
+        public async Task<IActionResult> AddNoteASync([FromBody] NoteRequestDto note)
         {
             int userId = Convert.ToInt32(HttpContext.Items["userId"]);
-            Note addednote = await _service.AddNote(note, userId);
+            var addednote = await _service.AddNote(note, userId);
             if (addednote == null)
             {
                 return BadRequest();
@@ -80,10 +81,10 @@ namespace Fundoo.Controllers
         [HttpPost]
         [Route("update/{noteId}")]
         [TokenAuthenticationFilter]
-        public async Task<IActionResult> UpdateNoteAsync(int noteId, [FromBody] Note note)
+        public async Task<IActionResult> UpdateNoteAsync(int noteId, [FromBody] NoteRequestDto note)
         {
             int userId = Convert.ToInt32(HttpContext.Items["userId"]);
-            Note updatedNote = await _service.UpdateNote(userId, noteId, note);
+            var updatedNote = await _service.UpdateNote(userId, noteId, note);
             if (updatedNote == null)
             {
                 return BadRequest("No suh node exist");
