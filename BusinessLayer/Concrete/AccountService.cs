@@ -1,5 +1,7 @@
-﻿using BusinessLayer.Interface;
+﻿using AutoMapper;
+using BusinessLayer.Interface;
 using ModelLayer;
+using ModelLayer.DTOs.AccountDto;
 using RepositoryLayer.Interface;
 using System.Threading.Tasks;
 using TokenAuthentication;
@@ -10,20 +12,22 @@ namespace BusinessLayer.Concrete
     {
         private readonly ITokenManager _tokenManager; 
         private IAccountRepository _repository;
+        private readonly IMapper _mapper;
 
-        public AccountService(IAccountRepository repository, ITokenManager _tokenManager)
+        public AccountService(IAccountRepository repository, ITokenManager _tokenManager, IMapper mapper)
         {
             _repository = repository;
             this._tokenManager = _tokenManager;
+            _mapper = mapper;
         }
 
-        public async Task<Account> Get(int id)
+        public async Task<AccountResponseDto> Get(int id)
         {
-            return await _repository.Get(id);
+            return _mapper.Map<AccountResponseDto>(await _repository.Get(id));
         }
         
 
-        public async Task<Account> AddAccount(Account account)
+        public async Task<AccountResponseDto> AddAccount(AccountRequestDto account)
         {
             Account user = await _repository.Get(account.Email);
             if (user != null)
@@ -39,10 +43,10 @@ namespace BusinessLayer.Concrete
                 Password = BCrypt.Net.BCrypt.HashPassword(account.Password),
                 PhoneNumber = account.PhoneNumber
             };
-            return await _repository.AddAccount(encryptedPasswordAccount);
+            return _mapper.Map<AccountResponseDto>(await _repository.AddAccount(encryptedPasswordAccount));
         }
 
-        public async Task<(Account, string)> Authenticate(string email, string password)
+        public async Task<(AccountResponseDto, string)> Authenticate(string email, string password)
         {
             Account user = await _repository.Get(email);
             if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
@@ -50,7 +54,8 @@ namespace BusinessLayer.Concrete
                 return (null, null);
             }
             string token = _tokenManager.Encode(user);
-            return (user, token);
+
+            return (_mapper.Map<AccountResponseDto>(user), token);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using ModelLayer;
+using ModelLayer.DTOs.AccountDto;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,8 +7,8 @@ namespace BusinessLayer.Interface
 {
     public interface IAccountService
     {
-        Task<Account> Get(int id);
-        Task<Account> AddAccount(Account account);
-        Task<(Account, string)> Authenticate(string id, string password);
+        Task<AccountResponseDto> Get(int id);
+        Task<AccountResponseDto> AddAccount(AccountRequestDto account);
+        Task<(AccountResponseDto, string)> Authenticate(string id, string password);
     }
 }
