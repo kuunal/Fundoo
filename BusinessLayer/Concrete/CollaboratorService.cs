@@ -1,8 +1,11 @@
-﻿using BusinessLayer.Interface;
+﻿using AutoMapper;
+using BusinessLayer.Interface;
 using ModelLayer;
+using ModelLayer.DTOs.CollaboratorDTO;
 using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,37 +15,46 @@ namespace BusinessLayer.Concrete
     {
         private readonly INotesRepository _noteRepository;
         private readonly ICollaboratorRepository _collaboratorRepository;
+        private readonly IMapper _mapper;
 
-
-        public CollaboratorService(INotesRepository noteRepository, ICollaboratorRepository collaboratorRepository) 
+        public CollaboratorService(INotesRepository noteRepository
+            , ICollaboratorRepository collaboratorRepository
+            , IMapper mapper) 
         {
             _noteRepository = noteRepository;
             _collaboratorRepository = collaboratorRepository;
+            _mapper = mapper;
         }
-        public async Task<Collaborator> AddCollaborator(string email, int userId, Collaborator collaborator)
+        public async Task<CollaboratorResponseDto> AddCollaborator(string email, int userId, CollaboratorRequestDto collaborator)
         {
             try
             {
-                Note note = await _noteRepository.GetNote(collaborator.NoteId, userId);
+                Collaborator modelCollaborator = _mapper.Map<Collaborator>(collaborator);
+                if (email == modelCollaborator.email)
+                {
+                    throw new Exception("Cannot collaborate with self");
+                }
+                Note note = await _noteRepository.GetNote(modelCollaborator.NoteId, userId);
                 if (note == null)
                 {
                     return null;
                 }
-                return await _collaboratorRepository.AddCollaborator(email, collaborator);
+                return _mapper.Map<CollaboratorResponseDto>(await _collaboratorRepository.AddCollaborator(email, modelCollaborator));
             }catch(Exception e)
             {
                 throw new Exception(e.Message);
             }
         }
 
-        public async Task<Collaborator> RemoveCollaborator(int collaboratorId, int userId)
+        public async Task<CollaboratorResponseDto> RemoveCollaborator(int collaboratorId, int userId)
         {
-            return await _collaboratorRepository.RemoveCollaborator(collaboratorId, userId);
+            return _mapper.Map<CollaboratorResponseDto>(await _collaboratorRepository.RemoveCollaborator(collaboratorId, userId));
         }
 
-        public async Task<List<Collaborator>> GetCollaborators(int userId)
+        public async Task<List<CollaboratorResponseDto>> GetCollaborators(int userId)
         {
-            return await _collaboratorRepository.GetCollaboratorAsync(userId);
+            return (await _collaboratorRepository.GetCollaboratorAsync(userId))
+                .Select(collaborator=>_mapper.Map<CollaboratorResponseDto>(collaborator)).ToList();
         }
     }
 }

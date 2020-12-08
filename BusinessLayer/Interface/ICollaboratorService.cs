@@ -1,4 +1,5 @@
 ﻿using ModelLayer;
+using ModelLayer.DTOs.CollaboratorDTO;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,10 +8,10 @@ namespace BusinessLayer.Interface
 {
     public interface ICollaboratorService
     {
-        Task<Collaborator> AddCollaborator(string email, int userId, Collaborator collaborator);
+        Task<CollaboratorResponseDto> AddCollaborator(string email, int userId, CollaboratorRequestDto collaborator);
 
-        Task<Collaborator> RemoveCollaborator(int collaboratorId, int userId);
+        Task<CollaboratorResponseDto> RemoveCollaborator(int collaboratorId, int userId);
 
-        Task<List<Collaborator>> GetCollaborators(int userId);
+        Task<List<CollaboratorResponseDto>> GetCollaborators(int userId);
     }
 }
