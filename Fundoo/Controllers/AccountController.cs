@@ -2,6 +2,7 @@
 using Greeting.TokenAuthentication;
 using Microsoft.AspNetCore.Mvc;
 using ModelLayer;
+using ModelLayer.DTOs.AccountDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,9 +31,9 @@ namespace Fundoo.Controllers
 
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> AddAccount([FromBody] Account account)
+        public async Task<IActionResult> AddAccount([FromBody] AccountRequestDto account)
         {
-            Account createdAccount = await _service.AddAccount(account);
+            AccountResponseDto createdAccount = await _service.AddAccount(account);
             if (createdAccount == null)
             {
                 return BadRequest("Account already exists");
