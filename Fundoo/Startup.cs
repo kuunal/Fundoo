@@ -1,3 +1,4 @@
+using AutoMapper;
 using BusinessLayer.Concrete;
 using BusinessLayer.Interface;
 using Fundoo.Utilities;
@@ -41,6 +42,7 @@ namespace Fundoo
             services.AddScoped<ILabelService, LabelService>();
             services.AddControllers();
             services.AddSwagger();
+            services.AddAutoMapper(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
