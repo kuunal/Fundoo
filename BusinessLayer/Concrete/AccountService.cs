@@ -37,7 +37,7 @@ namespace BusinessLayer.Concrete
             Account encryptedPasswordAccount = new Account
             {
                 DateOfBirth = account.DateOfBirth,
-                Email = account.Email,
+                Email = account.Email.ToLower(),
                 FirstName = account.FirstName,
                 LastName = account.LastName,
                 Password = BCrypt.Net.BCrypt.HashPassword(account.Password),

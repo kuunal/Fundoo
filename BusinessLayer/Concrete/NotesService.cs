@@ -1,9 +1,12 @@
-﻿using BusinessLayer.Interface;
+﻿using AutoMapper;
+using BusinessLayer.Interface;
 using ModelLayer;
+using ModelLayer.DTOs.NoteDTO;
 using RepositoryLayer.Concrete;
 using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BusinessLayer.Concrete
@@ -11,34 +14,41 @@ namespace BusinessLayer.Concrete
     public class NotesService : INotesService
     {
         private readonly INotesRepository _repository;
-        public NotesService(INotesRepository repository)
+        private readonly IMapper _mapper;
+
+        public NotesService(INotesRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
-        public async Task<Note> AddNote(Note note, int userid)
+        public async Task<NoteResponseDto> AddNote(NoteRequestDto note, int userid)
         {
-            note.AccountId = userid;
-            return await _repository.AddNote(note);
-        }
-
-        public async Task<Note> DeleteNote(int noteId, int userId)
-        {
-            return await _repository.DeleteNote(noteId, userId);
+            Note noteModel = _mapper.Map<Note>(note);
+            noteModel.AccountId = userid;
+            return _mapper.Map<NoteResponseDto>(await _repository.AddNote(noteModel));
         }
 
-        public async Task<Note> GetNote(int noteId, int userId)
+        public async Task<NoteResponseDto> DeleteNote(int noteId, int userId)
         {
-            return await _repository.GetNote(noteId, userId);
+            return _mapper.Map<NoteResponseDto>(await _repository.DeleteNote(noteId, userId));
         }
 
-        public async Task<List<Note>> GetNotes(int userid)
+        public async Task<NoteResponseDto> GetNote(int noteId, int userId)
         {
-            return await _repository.GetNotes(userid);
+            return _mapper.Map<NoteResponseDto>(await _repository.GetNote(noteId, userId));
         }
 
-        public async Task<Note> UpdateNote(int userId, int noteId, Note note)
+        public async Task<List<NoteResponseDto>> GetNotes(int userid)
         {
-            return await _repository.UpdateNote(userId, noteId, note);
+            return (await _repository.GetNotes(userid))
+                .Select(note=> _mapper.Map<NoteResponseDto>(note))
+                .ToList();
+        }
+
+        public async Task<NoteResponseDto> UpdateNote(int userId, int noteId, NoteRequestDto note)
+        {
+            return _mapper.Map<NoteResponseDto>(await _repository.UpdateNote(userId, 
+                noteId, _mapper.Map<Note>(note)));
         }
     }
 }

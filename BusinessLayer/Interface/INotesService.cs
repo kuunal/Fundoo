@@ -1,4 +1,5 @@
 ﻿using ModelLayer;
+using ModelLayer.DTOs.NoteDTO;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,10 +9,10 @@ namespace BusinessLayer.Interface
 {
     public interface INotesService
     {
-        Task<Note> AddNote(Note note, int userid);
-        Task<Note> DeleteNote(int noteId, int userid);
-        Task<Note> GetNote(int id, int userId);
-        Task<List<Note>> GetNotes(int userid);
-        Task<Note> UpdateNote(int userId, int noteId, Note note);
+        Task<NoteResponseDto> AddNote(NoteRequestDto note, int userid);
+        Task<NoteResponseDto> DeleteNote(int noteId, int userid);
+        Task<NoteResponseDto> GetNote(int id, int userId);
+        Task<List<NoteResponseDto>> GetNotes(int userid);
+        Task<NoteResponseDto> UpdateNote(int userId, int noteId, NoteRequestDto note);
     }
 }
