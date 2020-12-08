@@ -43,13 +43,9 @@ namespace Fundoo.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login(string id, string password)
+        public async Task<IActionResult> Login([FromBody] LoginDto credentials)
         {
-            if (id == null || password == null)
-            {
-                return BadRequest("Invalid inputs");
-            }
-            var (user, token) = await _service.Authenticate(id, password);
+            var (user, token) = await _service.Authenticate(credentials.Email, credentials.Password);
             return Ok(new { user = user, token = token });
         }
 
