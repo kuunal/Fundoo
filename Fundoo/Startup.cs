@@ -55,7 +55,9 @@ namespace Fundoo
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseExceptionHandler("/error");
-            
+
+            app.UseStaticFiles();
+
             app.UseHttpsRedirection();
 
             app.UseRouting();

@@ -58,5 +58,14 @@ namespace Fundoo.Controllers
             return Ok("Mail sent succesfully");
         }
 
+        [HttpPost]
+        [Route("reset")]
+        public async Task<IActionResult> Reset([FromForm] string password, [FromForm] string token)
+        {
+            
+            if (await _service.ResetPassword(password, token) == 1)
+                return Ok();
+            return BadRequest();
+        }
     }
 }

@@ -1,0 +1,176 @@
+body {
+  padding: 0px;
+  margin: 0;
+  box-sizing: border-box;
+  height: 100vh;
+  background-color: gainsboro;
+  overflow-x: hidden;
+}
+
+.container {
+  background-color: white;
+  padding: 4%;
+  margin: 5% auto;
+  width: 50%;
+  box-sizing: border-box;
+  box-shadow: 0px 0px 5px 0.5px rgba(0, 0, 0, 0.2);
+}
+
+
+.login-container {
+  width: 30%;
+}
+
+a {
+  color: rebeccapurple;
+}
+
+button {
+  margin-top: 5%;
+  color: rebeccapurple;
+  border-radius: 5px;
+  border: 0;
+  background-color: rgba(0, 0, 0, 0);
+  border-bottom: 2px solid rebeccapurple;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: rebeccapurple;
+  transition: all 0.9s ease;
+  transform: scale(1.2);
+  color: whitesmoke;
+}
+
+.container #login-form {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
+
+.container #login-form #div-container {
+  overflow-x: hidden;
+  width: 80%;
+  margin: 1%;
+  height: 3rem;
+  position: relative;
+}
+
+.container #login-form #div-container input {
+  height: 100%;
+  width: 100%;
+  background: none;
+  padding-bottom: 0px;
+  box-sizing: border-box;
+  padding-top: 30px;
+  border: none;
+  outline: none;
+  background: none;
+  border-bottom: 1px solid black;
+}
+
+.container #login-form #div-container label {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  border-bottom: 2px black;
+  pointer-events: none;
+}
+
+.container #login-form #div-container label::after {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  border-bottom: 2px solid blueviolet;
+  transition: all 0.4s ease;
+  transform: translateX(-100%);
+  bottom: 0;
+}
+
+.container #login-form #div-container label #email {
+  position: absolute;
+  bottom: 0;
+  transition: all 0.4s ease;
+}
+
+.container #login-form #div-container input:focus + label #email {
+  transform: translateY(-150%);
+  color: blueviolet;
+}
+
+.container
+  #login-form
+  #div-container
+  input:not(:placeholder-shown)
+  + label
+  #email {
+  transform: translateY(-150%);
+  color: blueviolet;
+}
+
+.container
+  #login-form
+  #div-container
+  input:not(:placeholder-shown)
+  + label::after {
+  transform: translateX(0%);
+}
+
+.container
+  #login-form
+  #div-password
+  input:not(:placeholder-shown)
+  label::after {
+  transform: translateX(0%);
+}
+
+.container #image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-image: url("https://st.depositphotos.com/1092019/3536/i/950/depositphotos_35365873-stock-photo-white-keyboard-with-register-button.jpg");
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+  opacity: 70%;
+}
+
+span ::before {
+  content: "*:";
+}
+
+@media (max-width: 750px) {
+  .container {
+    margin: 5% 5%;
+    width: 90%;
+  }
+}
+
+.error {
+    position: fixed;
+    width: 0%;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    transition: width 0.4s ease;
+}
+
+.error-active {
+    font-size:14px;
+    height: 3%;
+    width: 10%;
+    top: 85%;
+    left: 75%;
+    width: 25%;
+    background-color: rgba(255, 106, 0, 0.5);
+    border-left: 4px solid rgba(255, 106, 0, 1);
+    font-weight: bold;
+    padding: 2%;
+    margin: 5px;
+}
