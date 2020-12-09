@@ -9,8 +9,6 @@ namespace ModelLayer.DTOs.AccountDto
     {
         [Required]
         [MaxLength(100)]
-        [RegularExpression(@"^[a-zA-Z0-9]+[\\.\\-\\+\\_]?[a-zA-Z0-9]+@[a-zA-Z0-9]+[.]?[a-zA-Z]{2,4}[\\.]?([a-z]{2,4})?$",
-            ErrorMessage = "Please provide valid email id")]
         public string Email { get; set; }
 
         [Required]

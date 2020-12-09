@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CustomException;
+using Microsoft.EntityFrameworkCore;
 using ModelLayer;
 using RepositoryLayer.Interface;
 using System;
@@ -34,6 +35,17 @@ namespace RepositoryLayer.Concrete
         public async Task<Account> Get(int id)
         {
             return await _context.Accounts.FirstOrDefaultAsync(account => account.AccountId== id);
+        }
+
+        public async Task<int> ResetPassword(string value, string password)
+        {
+            Account user = await _context.Accounts.FirstOrDefaultAsync(account => account.Email.Equals(value));
+            if (user == null)
+            {
+                throw new FundooException("No such user found", 404);
+            }
+            user.Password = password;
+            return await _context.SaveChangesAsync();
         }
     }
 }
