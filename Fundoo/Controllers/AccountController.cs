@@ -49,5 +49,14 @@ namespace Fundoo.Controllers
             return Ok(new { user = user, token = token });
         }
 
+        [HttpPost]
+        [Route("forgot")]
+        public async Task<IActionResult> ForgotPassword([FromBody] string email)
+        {
+            var currentUrl = HttpContext.Request.Host;
+            await _service.ForgotPassword(email, currentUrl.Value);
+            return Ok("Mail sent succesfully");
+        }
+
     }
 }

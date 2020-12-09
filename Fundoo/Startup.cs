@@ -1,6 +1,7 @@
 using AutoMapper;
 using BusinessLayer.Concrete;
 using BusinessLayer.Interface;
+using EmailService;
 using Fundoo.Utilities;
 using Greeting.TokenAuthentication;
 using Microsoft.AspNetCore.Builder;
@@ -31,6 +32,11 @@ namespace Fundoo
             services.AddDbContextPool<FundooDbContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("ConnectionString"))
             );
+            EmailConfiguration emailConfig = Configuration
+                .GetSection("EmailConfiguration")
+                .Get<EmailConfiguration>();
+            services.AddSingleton(emailConfig);
+            services.AddScoped<IEmailSender, EmailSender>();
             services.AddSingleton<ITokenManager, TokenManager>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IAccountService, AccountService>();
