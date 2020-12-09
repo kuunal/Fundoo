@@ -5,6 +5,8 @@ using EmailService;
 using ModelLayer;
 using ModelLayer.DTOs.AccountDto;
 using RepositoryLayer.Interface;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using TokenAuthentication;
 
@@ -78,6 +80,13 @@ namespace BusinessLayer.Concrete
                     "Password Reset Email",
                     $"<h6>Click on the link to reset password<h6><a href='{url}'>{jwt}</a>");
             await _emailSender.SendEmail(message);
+        }
+
+        public async Task<int> ResetPassword(string password, string token)
+        {
+            ClaimsPrincipal claims = _tokenManager.Decode(token);
+            var claim = claims.Claims.ToList();
+            return (await _repository.ResetPassword(claim[0].Value, password));
         }
 
     }
