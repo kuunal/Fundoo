@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using BusinessLayer.Interface;
+using BusinessLayer.MSMQ;
+using EmailService;
 using ModelLayer;
 using ModelLayer.DTOs.CollaboratorDTO;
 using RepositoryLayer.Interface;
@@ -16,14 +18,17 @@ namespace BusinessLayer.Concrete
         private readonly INotesRepository _noteRepository;
         private readonly ICollaboratorRepository _collaboratorRepository;
         private readonly IMapper _mapper;
+        private readonly IMqServices _mqServices;
 
         public CollaboratorService(INotesRepository noteRepository
             , ICollaboratorRepository collaboratorRepository
-            , IMapper mapper) 
+            , IMapper mapper
+            , IEmailSender emailSender) 
         {
             _noteRepository = noteRepository;
             _collaboratorRepository = collaboratorRepository;
             _mapper = mapper;
+            _mqServices = new MsmqService(emailSender);
         }
         public async Task<CollaboratorResponseDto> AddCollaborator(string email, int userId, CollaboratorRequestDto collaborator)
         {
@@ -39,6 +44,7 @@ namespace BusinessLayer.Concrete
                 {
                     return null;
                 }
+                _mqServices.AddToQueue(modelCollaborator.email);
                 return _mapper.Map<CollaboratorResponseDto>(await _collaboratorRepository.AddCollaborator(email, modelCollaborator));
             }catch(Exception e)
             {
