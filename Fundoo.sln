@@ -13,9 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLayer", "BusinessLa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenAuthentication", "TokenAuthentication\TokenAuthentication.csproj", "{9A774B2E-351A-4606-93D8-0E11DC201A50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomException", "CustomException\CustomException.csproj", "{28662A12-331C-4EB2-8814-F50FCE2C4189}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomException", "CustomException\CustomException.csproj", "{28662A12-331C-4EB2-8814-F50FCE2C4189}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailService", "EmailService\EmailService.csproj", "{15D4C933-985F-4FB9-AB6E-1A2B1BC39577}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmailService", "EmailService\EmailService.csproj", "{15D4C933-985F-4FB9-AB6E-1A2B1BC39577}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
