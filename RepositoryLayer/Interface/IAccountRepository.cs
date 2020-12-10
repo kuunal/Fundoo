@@ -11,6 +11,6 @@ namespace RepositoryLayer.Interface
 
 
         Task<Account> AddAccount(Account account);
-        Task<int> ResetPassword(string value, string password);
+        Task<int> ResetPassword(Account user, string password);
     }
 }

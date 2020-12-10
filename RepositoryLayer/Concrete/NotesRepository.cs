@@ -38,19 +38,30 @@ namespace RepositoryLayer.Concrete
                         .FirstOrDefaultAsync(note=>note.NoteId == noteId && note.AccountId == userId);
         }
 
+        public async Task<Note> GetNoteByAccountAndCollaborator(int userId, int collaboratorNoteId)
+        {
+            return await _context.Notes
+                .FirstOrDefaultAsync(note => note.AccountId == userId
+                                            && note.NoteId == collaboratorNoteId);
+        }
+
         public async Task<List<Note>> GetNotes(int userId)
         {
             return await _context.Notes
                          .Where(note => note.Account.AccountId == userId).ToListAsync();
         }
 
-        public async Task<Note> UpdateNote(int userId, int noteId, Note note)
+        public async Task<Note> GetOwnerOfLabel(int labelNoteId, int userId)
+        {
+            return await _context.Notes
+                                .FirstOrDefaultAsync(note => note.NoteId == labelNoteId
+                                                            && note.AccountId == userId);
+        }
+
+        public async Task<Note> UpdateNote(Note noteToUpdate, Note note)
         {
             return await Task.Run(async () =>
             {
-                Note noteToUpdate = await _context.Notes.FirstOrDefaultAsync(note=>note.NoteId == noteId && note.AccountId == userId);
-                if (noteToUpdate == null)
-                    return null;
                 noteToUpdate.Image = note.Image;
                 noteToUpdate.Description = note.Description;
                 noteToUpdate.Color = note.Color;
@@ -61,6 +72,12 @@ namespace RepositoryLayer.Concrete
                 await _context.SaveChangesAsync();
                 return note;
             });
+        }
+
+        public async Task<Note> GetNoteByNoteIdAndUserId(int noteId, int userId)
+        {
+            return await _context.Notes.FirstOrDefaultAsync(note=>note.NoteId == noteId && note.AccountId == userId);
+
         }
     }
 }

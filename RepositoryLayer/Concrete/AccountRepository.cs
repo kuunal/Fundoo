@@ -37,13 +37,9 @@ namespace RepositoryLayer.Concrete
             return await _context.Accounts.FirstOrDefaultAsync(account => account.AccountId== id);
         }
 
-        public async Task<int> ResetPassword(string value, string password)
+        public async Task<int> ResetPassword(Account user, string password)
         {
-            Account user = await _context.Accounts.FirstOrDefaultAsync(account => account.Email.Equals(value));
-            if (user == null)
-            {
-                throw new FundooException("No such user found", 404);
-            }
+            
             user.Password = password;
             return await _context.SaveChangesAsync();
         }

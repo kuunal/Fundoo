@@ -12,7 +12,9 @@ namespace RepositoryLayer.Interface
         Task<Note> DeleteNote(int noteId, int userId);
         Task<Note> GetNote(int noteId, int userId);
         Task<List<Note>> GetNotes(int userId);  
-        Task<Note> UpdateNote(int userId, int noteid, Note note);
-
+        Task<Note> UpdateNote(Note noteToUpdate, Note note);
+        Task<Note> GetNoteByAccountAndCollaborator(int userId, int collaboratorNoteId);
+        Task<Note> GetOwnerOfLabel(int labelNoteId, int userId);
+        Task<Note> GetNoteByNoteIdAndUserId(int noteId, int userId);
     }
 }

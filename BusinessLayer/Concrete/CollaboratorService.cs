@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BusinessLayer.Interface;
 using BusinessLayer.MSMQ;
+using CustomException;
 using EmailService;
 using ModelLayer;
 using ModelLayer.DTOs.CollaboratorDTO;
@@ -39,22 +40,39 @@ namespace BusinessLayer.Concrete
                 {
                     throw new Exception("Cannot collaborate with self");
                 }
+                Collaborator collaboratorWithSameUser = await _collaboratorRepository.GetCollaboratorByEmail(modelCollaborator.email, modelCollaborator.NoteId);
+                if (collaboratorWithSameUser != null)
+                {
+                    throw new FundooException("Already added as collaborator");
+                }
                 Note note = await _noteRepository.GetNote(modelCollaborator.NoteId, userId);
                 if (note == null)
                 {
-                    return null;
+                    throw new FundooException("No such note!");
                 }
                 _mqServices.AddToQueue(modelCollaborator.email);
                 return _mapper.Map<CollaboratorResponseDto>(await _collaboratorRepository.AddCollaborator(email, modelCollaborator));
-            }catch(Exception e)
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException)
             {
-                throw new Exception(e.Message);
+                throw new FundooException("No such exists!");
             }
         }
 
         public async Task<CollaboratorResponseDto> RemoveCollaborator(int collaboratorId, int userId)
         {
-            return _mapper.Map<CollaboratorResponseDto>(await _collaboratorRepository.RemoveCollaborator(collaboratorId, userId));
+            Collaborator isCollaborator = await _collaboratorRepository.GetCollaboratorByIdAsync(collaboratorId);
+            if (isCollaborator == null)
+            {
+                throw new FundooException("No such collaborator");
+            }
+            Note noteOwner = await _noteRepository.GetNoteByAccountAndCollaborator(userId, isCollaborator.NoteId);  
+            if (noteOwner == null)
+            {
+                throw new FundooException("No such note");
+            }
+
+            return _mapper.Map<CollaboratorResponseDto>(await _collaboratorRepository.RemoveCollaborator(isCollaborator));
         }
 
         public async Task<List<CollaboratorResponseDto>> GetCollaborators(int userId)

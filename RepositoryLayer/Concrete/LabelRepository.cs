@@ -20,16 +20,15 @@ namespace RepositoryLayer.Concrete
         }
         public async Task<Label> AddLabel(Label label, int userId)
         {
-            Note noteOwner = await _context.Notes
-                                .FirstOrDefaultAsync(note => note.NoteId == label.NoteId 
-                                                            && note.AccountId == userId);
-            if (noteOwner == null)
-            {
-                throw new Exception("No such note exists!");
-            }
+            
             var result = await _context.Labels.AddAsync(label);
             await _context.SaveChangesAsync();
             return result.Entity;
+        }
+
+        public async Task<Label> GetLabelByIdAsync(int labelId)
+        {
+            return await _context.Labels.FindAsync(labelId);
         }
 
         public async Task<List<Label>> GetLabelsAsync(int userId)
@@ -46,19 +45,8 @@ namespace RepositoryLayer.Concrete
                     Labels = labels.Labels
                 }).ToListAsync();
         }
-        public async Task<Label> RemoveLabelAsync(int userId, int labelId)
-        {
-            Label label = await _context.Labels.FindAsync(labelId);
-            if (label == null)
-            {
-                throw new FundooException("No such label exist!");
-            }
-            Note ownerNote = await _context.Notes.FirstOrDefaultAsync(note=>note.AccountId == userId
-                                                                        && note.NoteId == label.NoteId);
-            if (ownerNote == null)
-            {
-                throw new FundooException("No such note exists!");
-            }
+        public async Task<Label> RemoveLabelAsync(Label label)
+        {   
             return await Task.Run(async () =>
             {
 

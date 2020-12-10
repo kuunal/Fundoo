@@ -45,10 +45,10 @@ namespace BusinessLayer.Concrete
                 .ToList();
         }
 
-        public async Task<NoteResponseDto> UpdateNote(int userId, int noteId, NoteRequestDto note)
+        public async Task<NoteResponseDto> UpdateNote(int userId, int noteId, NoteRequestDto noteToUpdate)
         {
-            return _mapper.Map<NoteResponseDto>(await _repository.UpdateNote(userId, 
-                noteId, _mapper.Map<Note>(note)));
+            Note note = await _repository.GetNoteByNoteIdAndUserId(noteId, userId);
+            return _mapper.Map<NoteResponseDto>(await _repository.UpdateNote(_mapper.Map<Note>(noteToUpdate), note));
         }
     }
 }

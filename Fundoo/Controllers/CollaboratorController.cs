@@ -30,10 +30,6 @@ namespace Fundoo.Controllers
             string email = (string) HttpContext.Items["email"];
 
             var addedCollaborator = await _service.AddCollaborator(email, userId, collaborator);
-            if (addedCollaborator == null)
-            {
-                return BadRequest("Invalid Note");
-            }
             return Ok(collaborator);
         }
 

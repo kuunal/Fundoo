@@ -86,7 +86,9 @@ namespace BusinessLayer.Concrete
         {
             ClaimsPrincipal claims = _tokenManager.Decode(token);
             var claim = claims.Claims.ToList();
-            return (await _repository.ResetPassword(claim[1].Value, BCrypt.Net.BCrypt.HashPassword(password)));
+            string email = claim[1].Value;
+            Account user = await _repository.Get(email);
+            return (await _repository.ResetPassword(user, BCrypt.Net.BCrypt.HashPassword(password)));
         }
 
     }
