@@ -1,4 +1,5 @@
 ﻿using BusinessLayer.Interface;
+using Caching;
 using Greeting.TokenAuthentication;
 using Microsoft.AspNetCore.Mvc;
 using ModelLayer;
@@ -24,6 +25,7 @@ namespace Fundoo.Controllers
         [HttpGet]
         [Route("get")]
         [TokenAuthenticationFilter]
+        [Cached(600)]
         public async Task<IActionResult> GetNotesAsync()
         {
             int userId = Convert.ToInt32(HttpContext.Items["userId"]);
