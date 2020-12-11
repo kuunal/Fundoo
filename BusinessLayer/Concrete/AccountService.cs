@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BusinessLayer.Interface;
+using BusinessLayer.MSMQ;
 using CustomException;
 using EmailService;
 using ModelLayer;
@@ -17,17 +18,18 @@ namespace BusinessLayer.Concrete
         private readonly ITokenManager _tokenManager; 
         private IAccountRepository _repository;
         private readonly IMapper _mapper;
+        private readonly IMqServices _mqServices;
         private readonly IEmailSender _emailSender;
 
         public AccountService(IAccountRepository repository
             , ITokenManager _tokenManager
             , IMapper mapper
-            , IEmailSender emailSender)
+            , IMqServices mqServices) 
         {
             _repository = repository;
             this._tokenManager = _tokenManager;
             _mapper = mapper;
-            _emailSender = emailSender;
+            _mqServices = mqServices;
         }
 
         public async Task<AccountResponseDto> Get(int id)
@@ -79,7 +81,7 @@ namespace BusinessLayer.Concrete
             Message message = new Message(new string[] { user.Email },
                     "Password Reset Email",
                     $"<h6>Click on the link to reset password<h6><a href='{url}'>{jwt}</a>");
-            await _emailSender.SendEmail(message);
+            _mqServices.AddToQueue(message);
         }
 
         public async Task<int> ResetPassword(string password, string token)

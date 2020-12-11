@@ -5,6 +5,7 @@ using CustomException;
 using EmailService;
 using ModelLayer;
 using ModelLayer.DTOs.CollaboratorDTO;
+using Newtonsoft.Json;
 using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
@@ -24,12 +25,12 @@ namespace BusinessLayer.Concrete
         public CollaboratorService(INotesRepository noteRepository
             , ICollaboratorRepository collaboratorRepository
             , IMapper mapper
-            , IEmailSender emailSender) 
+            , IMqServices mqServices) 
         {
             _noteRepository = noteRepository;
             _collaboratorRepository = collaboratorRepository;
             _mapper = mapper;
-            _mqServices = new MsmqService(emailSender);
+            _mqServices = mqServices;
         }
         public async Task<CollaboratorResponseDto> AddCollaborator(string email, int userId, CollaboratorRequestDto collaborator)
         {
@@ -50,7 +51,10 @@ namespace BusinessLayer.Concrete
                 {
                     throw new FundooException("No such note!");
                 }
-                _mqServices.AddToQueue(modelCollaborator.email);
+                Message message = new EmailService.Message(new string[] { modelCollaborator.email },
+                "Added as collaborator",
+                $"<h2>You have been added as collaborated by <p style='color:red'>"+email +"</p> To note <p style='color:green'>"+note.Title+"</p><h2>");
+                _mqServices.AddToQueue(message);
                 return _mapper.Map<CollaboratorResponseDto>(await _collaboratorRepository.AddCollaborator(email, modelCollaborator));
             }
             catch (Microsoft.EntityFrameworkCore.DbUpdateException)
