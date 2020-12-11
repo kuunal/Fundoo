@@ -39,7 +39,7 @@ namespace BusinessLayer.MSMQ
             var msg = messageQueue.EndReceive(e.AsyncResult);
             string email = msg.Body.ToString();
             EmailService.Message message = new EmailService.Message(new string[] { email },
-                    "Password Reset Email",
+                    "Added as collaborator",
                     $"You have been collaborated");
             _emailSender.SendEmail(message);   
         }
