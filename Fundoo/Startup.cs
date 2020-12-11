@@ -1,6 +1,7 @@
 using AutoMapper;
 using BusinessLayer.Concrete;
 using BusinessLayer.Interface;
+using BusinessLayer.MSMQ;
 using Caching;
 using EmailService;
 using Fundoo.Utilities;
@@ -54,6 +55,7 @@ namespace Fundoo
             services.AddScoped<ICollaboratorService, CollaboratorService>();
             services.AddScoped<ILabelRepository, LabelRepository>();
             services.AddScoped<ILabelService, LabelService>();
+            services.AddScoped<IMqServices, MsmqService>();
             services.AddControllers();
             services.AddSwagger();
             services.AddAutoMapper(typeof(Startup));
