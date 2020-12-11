@@ -1,6 +1,7 @@
 ﻿using MailKit.Net.Smtp;
 using MimeKit;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace EmailService
@@ -49,7 +50,7 @@ namespace EmailService
         {
             var emailMessage = new MimeMessage();
             emailMessage.From.Add(new MailboxAddress(_config.From));
-            emailMessage.To.AddRange(message.To);
+            emailMessage.To.AddRange(message.To.Select(user=>MailboxAddress.Parse(user)));
             emailMessage.Subject = message.Subject;
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = string.Format(message.Content) };
             return emailMessage;
