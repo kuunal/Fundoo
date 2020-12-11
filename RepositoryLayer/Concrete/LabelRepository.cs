@@ -1,5 +1,4 @@
-﻿using CustomException;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using ModelLayer;
 using RepositoryLayer.Interface;
 using System;

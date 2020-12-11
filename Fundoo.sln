@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLayer", "BusinessLa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenAuthentication", "TokenAuthentication\TokenAuthentication.csproj", "{9A774B2E-351A-4606-93D8-0E11DC201A50}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomException", "CustomException\CustomException.csproj", "{28662A12-331C-4EB2-8814-F50FCE2C4189}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmailService", "EmailService\EmailService.csproj", "{15D4C933-985F-4FB9-AB6E-1A2B1BC39577}"
 EndProject
 Global
@@ -43,10 +41,6 @@ Global
 		{9A774B2E-351A-4606-93D8-0E11DC201A50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A774B2E-351A-4606-93D8-0E11DC201A50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A774B2E-351A-4606-93D8-0E11DC201A50}.Release|Any CPU.Build.0 = Release|Any CPU
-		{28662A12-331C-4EB2-8814-F50FCE2C4189}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{28662A12-331C-4EB2-8814-F50FCE2C4189}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{28662A12-331C-4EB2-8814-F50FCE2C4189}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{28662A12-331C-4EB2-8814-F50FCE2C4189}.Release|Any CPU.Build.0 = Release|Any CPU
 		{15D4C933-985F-4FB9-AB6E-1A2B1BC39577}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{15D4C933-985F-4FB9-AB6E-1A2B1BC39577}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15D4C933-985F-4FB9-AB6E-1A2B1BC39577}.Release|Any CPU.ActiveCfg = Release|Any CPU
