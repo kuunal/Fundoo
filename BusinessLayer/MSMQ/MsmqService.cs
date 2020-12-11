@@ -1,5 +1,6 @@
 ﻿using EmailService;
 using Experimental.System.Messaging;
+using Newtonsoft.Json;
 using System;
 using TokenAuthentication;
 
@@ -25,11 +26,12 @@ namespace BusinessLayer.MSMQ
             _emailSender = emailSender;
         }
 
-        public void AddToQueue(string email)
+        public void AddToQueue(EmailService.Message message)
         {
-            messageQueue.Formatter= new XmlMessageFormatter(new Type[] { typeof(string) });
+            string mailInfo = JsonConvert.SerializeObject(message);
+            messageQueue.Formatter= new BinaryMessageFormatter();
             messageQueue.ReceiveCompleted += MessageQueue_ReceiveCompleted;
-            messageQueue.Send(email);
+            messageQueue.Send(mailInfo);
             messageQueue.BeginReceive();
             messageQueue.Close();
         }
@@ -37,11 +39,10 @@ namespace BusinessLayer.MSMQ
         private void MessageQueue_ReceiveCompleted(object sender, ReceiveCompletedEventArgs e)
         {
             var msg = messageQueue.EndReceive(e.AsyncResult);
-            string email = msg.Body.ToString();
-            EmailService.Message message = new EmailService.Message(new string[] { email },
-                    "Added as collaborator",
-                    $"You have been collaborated");
-            _emailSender.SendEmail(message);   
+            EmailService.Message message = JsonConvert.DeserializeObject<EmailService.Message>(msg.Body.ToString());
+
+            _emailSender.SendEmail(message);
+            messageQueue.BeginReceive();
         }
     }
 }

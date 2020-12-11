@@ -7,7 +7,7 @@ namespace BusinessLayer.MSMQ
 {
     public interface IMqServices
     {
-        void AddToQueue(string email);
+        void AddToQueue(Message email);
         //private void MessageQueue_ReceiveCompleted(object sender, ReceiveCompletedEventArgs e);
 
 
