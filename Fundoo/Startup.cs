@@ -1,6 +1,7 @@
 using AutoMapper;
 using BusinessLayer.Concrete;
 using BusinessLayer.Interface;
+using Caching;
 using EmailService;
 using Fundoo.Utilities;
 using Greeting.TokenAuthentication;
@@ -35,6 +36,13 @@ namespace Fundoo
             EmailConfiguration emailConfig = Configuration
                 .GetSection("EmailConfiguration")
                 .Get<EmailConfiguration>();
+            var cacheSettings = Configuration.GetSection("CacheSettings").Get<CacheSettings>();
+            services.AddSingleton(cacheSettings);
+            if (cacheSettings.IsEnabled)
+            {
+                services.AddStackExchangeRedisCache(options => options.Configuration = cacheSettings.ConnectionString);
+                services.AddSingleton<IResponseCacheService, ResponseCacheService>(); 
+            }
             services.AddSingleton(emailConfig);
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddSingleton<ITokenManager, TokenManager>();
