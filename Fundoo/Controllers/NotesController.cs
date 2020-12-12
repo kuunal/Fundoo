@@ -25,7 +25,6 @@ namespace Fundoo.Controllers
         }
 
         [HttpGet]
-        [Route("get")]
         [TokenAuthenticationFilter]
         [Cached(600)]
         public async Task<IActionResult> GetNotesAsync()
@@ -65,11 +64,11 @@ namespace Fundoo.Controllers
 
         [HttpPost]
         [TokenAuthenticationFilter]
-        [Cached(600)]
-        public async Task<IActionResult> AddNoteASync([FromBody] NoteRequestDto note)
+        public async Task<IActionResult> AddNoteASync([FromForm] NoteRequestDto note)
         {
             int userId = Convert.ToInt32(HttpContext.Items["userId"]);
-            var addednote = await _service.AddNote(note, userId);
+            string email = (string) HttpContext.Items["email"];
+            var addednote = await _service.AddNote(note, userId, email);
             return Ok(new
             {
                 Data = note,
