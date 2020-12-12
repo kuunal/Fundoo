@@ -35,6 +35,7 @@ namespace RepositoryLayer.Concrete
         public async Task<Note> GetNote(int noteId, int userId)
         {
             return await _context.Notes
+                        .OrderByDescending(note=>note.IsArchieved)
                         .FirstOrDefaultAsync(note=>note.NoteId == noteId && note.AccountId == userId);
         }
 
