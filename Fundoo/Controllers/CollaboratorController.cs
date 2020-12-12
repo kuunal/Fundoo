@@ -1,4 +1,5 @@
 ﻿using BusinessLayer.Interface;
+using Fundoo.Utilities;
 using Greeting.TokenAuthentication;
 using Microsoft.AspNetCore.Mvc;
 using ModelLayer;
@@ -6,6 +7,7 @@ using ModelLayer.DTOs.CollaboratorDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Fundoo.Controllers
@@ -22,19 +24,22 @@ namespace Fundoo.Controllers
         }
 
         [HttpPost]
-        [Route("add")]
         [TokenAuthenticationFilter]
         public async Task<IActionResult> AddCollabortor([FromBody] CollaboratorRequestDto collaborator)
         {
             int userId = Convert.ToInt32(HttpContext.Items["userId"]);
-            string email = (string) HttpContext.Items["email"];
+            string email = (string)HttpContext.Items["email"];
 
             var addedCollaborator = await _service.AddCollaborator(email, userId, collaborator);
-            return Ok(collaborator);
+            return Ok(new
+            {
+                Data = collaborator,
+                StatusCode = (int)HttpStatusCode.Created,
+                Message = ResponseMessages.SUCCESS
+            });
         }
 
         [HttpGet]
-        [Route("get")]
         [TokenAuthenticationFilter]
         public async Task<IActionResult> GetCollaboratorsAsync()
         {
@@ -42,13 +47,23 @@ namespace Fundoo.Controllers
             var collaborators = await _service.GetCollaborators(userId);
             if (collaborators == null)
             {
-                return BadRequest("No collaborators");
+                return NotFound(new
+                {
+                    Data = (string)null,
+                    StatusCode = (int)HttpStatusCode.NotFound,
+                    ResponseMessages.NO_COLLABORATOR
+                });
             }
-            return Ok(collaborators);
+            return Ok(new
+            {
+                Data = collaborators,
+                StatusCode = (int)HttpStatusCode.OK,
+                ResponseMessages.SUCCESS
+            });
         }
 
         [HttpDelete]
-        [Route("delete/{id}")]
+        [Route("{id}")]
         [TokenAuthenticationFilter]
         public async Task<IActionResult> RemoveCollaborator(int id)
         {
@@ -56,9 +71,19 @@ namespace Fundoo.Controllers
             var removedCollaborator = await _service.RemoveCollaborator(id, userId);
             if (removedCollaborator == null)
             {
-                return BadRequest();
+                return NotFound(new
+                {
+                    Data = (string)null,
+                    StatusCode = (int)HttpStatusCode.NotFound,
+                    ResponseMessages.NO_SUCH_COLLABORATOR
+                });
             }
-            return Ok();
+            return Ok(new
+            {
+                Data = removedCollaborator,
+                StatusCode = (int)HttpStatusCode.OK,
+                ResponseMessages.DELETED
+            });
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BusinessLayer.Interface;
+using Fundoo.Utilities;
 using Greeting.TokenAuthentication;
 using Microsoft.AspNetCore.Mvc;
 using ModelLayer;
@@ -6,6 +7,7 @@ using ModelLayer.DTOs.AccountDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Fundoo.Controllers
@@ -26,19 +28,30 @@ namespace Fundoo.Controllers
         public async Task<IActionResult> Index()
         {
             int id = Convert.ToInt32(HttpContext.Items["userId"]);
-            return Ok(await _service.Get(id));
+            return Ok(new
+            {
+                Data = await _service.Get(id)
+                ,
+                StatusCode = (int)HttpStatusCode.OK
+                ,
+                Message = ResponseMessages.SUCCESS
+            });
         }
 
         [HttpPost]
-        [Route("create")]
         public async Task<IActionResult> AddAccount([FromBody] AccountRequestDto account)
         {
             AccountResponseDto createdAccount = await _service.AddAccount(account);
             if (createdAccount == null)
             {
-                return BadRequest("Account already exists");
+                return BadRequest(new
+                {
+                    Data = "Account already exists",
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Message = ResponseMessages.FAILED
+                });
             }
-            return Ok(createdAccount);
+            return Ok(new { Data = createdAccount, StatusCode = (int)HttpStatusCode.Created, ResponseMessages.CREATED });
         }
 
         [HttpPost]
@@ -46,7 +59,12 @@ namespace Fundoo.Controllers
         public async Task<IActionResult> Login([FromBody] LoginDto credentials)
         {
             var (user, token) = await _service.Authenticate(credentials.Email, credentials.Password);
-            return Ok(new { user = user, token = token });
+            return Ok(new
+            {
+                Data = new Dictionary<AccountResponseDto, string>() { { user, token } },
+                StatusCode = (int)HttpStatusCode.Accepted,
+                ResponseMessages.SUCCESS
+            });
         }
 
         [HttpPost]
@@ -55,17 +73,32 @@ namespace Fundoo.Controllers
         {
             var currentUrl = HttpContext.Request.Host;
             await _service.ForgotPassword(email, currentUrl.Value);
-            return Ok("Mail sent succesfully");
+            return Ok(new
+            {
+                Data = (string)null,
+                StatusCode = HttpStatusCode.OK,
+                Message = ResponseMessages.MAIL_SENT
+            });
         }
 
         [HttpPost]
         [Route("reset")]
         public async Task<IActionResult> Reset([FromForm] string password, [FromForm] string token)
         {
-            
+
             if (await _service.ResetPassword(password, token) == 1)
-                return Ok();
-            return BadRequest();
+                return Ok(new
+                {
+                    Data = (string)null,
+                    StatusCode = HttpStatusCode.OK,
+                    Message = ResponseMessages.SUCCESS
+                });
+            return BadRequest(new
+            {
+                Data = (string)null,
+                StatusCode = HttpStatusCode.BadRequest,
+                Message = ResponseMessages.FAILED
+            });
         }
     }
 }
