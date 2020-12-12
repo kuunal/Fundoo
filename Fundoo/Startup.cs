@@ -1,5 +1,6 @@
 using AutoMapper;
 using BusinessLayer.Concrete;
+using BusinessLayer.ImagesCloud;
 using BusinessLayer.Interface;
 using BusinessLayer.MSMQ;
 using Caching;
@@ -44,7 +45,10 @@ namespace Fundoo
                 services.AddStackExchangeRedisCache(options => options.Configuration = cacheSettings.ConnectionString);
                 services.AddSingleton<IResponseCacheService, ResponseCacheService>(); 
             }
+            var cloudConfigurations = Configuration.GetSection("Cloudinary").Get<CloudConfiguration>();
+            services.AddSingleton(cloudConfigurations);
             services.AddSingleton(emailConfig);
+            services.AddScoped<ICloudService, CloudService>();
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddSingleton<ITokenManager, TokenManager>();
             services.AddScoped<IAccountRepository, AccountRepository>();
