@@ -61,9 +61,9 @@ namespace Fundoo.Controllers
             var (user, token) = await _service.Authenticate(credentials.Email, credentials.Password);
             return Ok(new
             {
-                Data = new Dictionary<AccountResponseDto, string>() { { user, token } },
+                Data =  new { user = user, token = token},
                 StatusCode = (int)HttpStatusCode.Accepted,
-                ResponseMessages.SUCCESS
+                Message = ResponseMessages.SUCCESS
             });
         }
 
