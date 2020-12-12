@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BusinessLayer.ImagesCloud;
 using BusinessLayer.Interface;
 using ModelLayer;
 using ModelLayer.DTOs.NoteDTO;
@@ -15,16 +16,21 @@ namespace BusinessLayer.Concrete
     {
         private readonly INotesRepository _repository;
         private readonly IMapper _mapper;
+        private readonly ICloudService _cloudService;
 
-        public NotesService(INotesRepository repository, IMapper mapper)
+        public NotesService(INotesRepository repository, IMapper mapper, ICloudService cloudService)
         {
             _repository = repository;
             _mapper = mapper;
+            _cloudService = cloudService;
         }
-        public async Task<NoteResponseDto> AddNote(NoteRequestDto note, int userid)
+        public async Task<NoteResponseDto> AddNote(NoteRequestDto note, int userid, string email)
         {
             Note noteModel = _mapper.Map<Note>(note);
             noteModel.AccountId = userid;
+            if (noteModel.Image.Length > 0) {
+                noteModel.Image = await _cloudService.UpdloadToCloud(note.Image, email);
+            }
             return _mapper.Map<NoteResponseDto>(await _repository.AddNote(noteModel));
         }
 

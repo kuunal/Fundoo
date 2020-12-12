@@ -9,7 +9,7 @@ namespace BusinessLayer.Interface
 {
     public interface INotesService
     {
-        Task<NoteResponseDto> AddNote(NoteRequestDto note, int userid);
+        Task<NoteResponseDto> AddNote(NoteRequestDto note, int userid, string email);
         Task<NoteResponseDto> DeleteNote(int noteId, int userid);
         Task<NoteResponseDto> GetNote(int id, int userId);
         Task<List<NoteResponseDto>> GetNotes(int userid);
