@@ -9,6 +9,7 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.2" />
     <PackageReference Include="Experimental.System.Messaging" Version="1.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
   </ItemGroup>
 
   <ItemGroup>
