@@ -18,6 +18,7 @@ namespace Fundoo.Utilities
         public static readonly string NO_NOTES = "You havent created any notes";
         public static readonly string NO_SUCH_NOTES = "No such note exists!";
         public static readonly string UPDATED = "Updated successfully";
+        public static readonly string NOTOKEN = "Token missing";
 
     }
 }
