@@ -20,7 +20,7 @@ namespace RepositoryLayer.Concrete
         public async Task<Note> AddNote(Note note)
         {
             var result = await _context.Notes.AddAsync(note);
-                await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return result.Entity;
         }
 

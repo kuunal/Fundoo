@@ -46,13 +46,9 @@ namespace RepositoryLayer.Concrete
         }
         public async Task<Label> RemoveLabelAsync(Label label)
         {   
-            return await Task.Run(async () =>
-            {
-
             var result = _context.Labels.Remove(label);
-                await _context.SaveChangesAsync();
-                return result.Entity;
-            });
+            await _context.SaveChangesAsync();
+            return result.Entity;
         }
 
     }
