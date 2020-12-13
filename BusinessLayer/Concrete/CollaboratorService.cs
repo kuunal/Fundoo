@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BusinessLayer.Exceptions;
 using BusinessLayer.Interface;
 using BusinessLayer.MSMQ;
 using CustomException;
@@ -39,17 +40,17 @@ namespace BusinessLayer.Concrete
                 Collaborator modelCollaborator = _mapper.Map<Collaborator>(collaborator);
                 if (email == modelCollaborator.email)
                 {
-                    throw new Exception("Cannot collaborate with self");
+                    throw new FundooException(ExceptionMessages.SELF_COLLABORATE);
                 }
                 Collaborator collaboratorWithSameUser = await _collaboratorRepository.GetCollaboratorByEmail(modelCollaborator.email, modelCollaborator.NoteId);
                 if (collaboratorWithSameUser != null)
                 {
-                    throw new FundooException("Already added as collaborator");
+                    throw new FundooException(ExceptionMessages.ALREADY_COLLABORATER);
                 }
                 Note note = await _noteRepository.GetNote(modelCollaborator.NoteId, userId);
                 if (note == null)
                 {
-                    throw new FundooException("No such note!");
+                    throw new FundooException(ExceptionMessages.NO_SUCH_NOTE);
                 }
                 Message message = new EmailService.Message(new string[] { modelCollaborator.email },
                 "Added as collaborator",
@@ -59,7 +60,7 @@ namespace BusinessLayer.Concrete
             }
             catch (Microsoft.EntityFrameworkCore.DbUpdateException)
             {
-                throw new FundooException("No such exists!");
+                throw new FundooException(ExceptionMessages.NO_SUCH_USER);
             }
         }
 
@@ -68,12 +69,12 @@ namespace BusinessLayer.Concrete
             Collaborator isCollaborator = await _collaboratorRepository.GetCollaboratorByIdAsync(collaboratorId);
             if (isCollaborator == null)
             {
-                throw new FundooException("No such collaborator");
+                throw new FundooException(ExceptionMessages.NO_SUCH_COLLABORATOR);
             }
             Note noteOwner = await _noteRepository.GetNoteByAccountAndCollaborator(userId, isCollaborator.NoteId);  
             if (noteOwner == null)
             {
-                throw new FundooException("No such note");
+                throw new FundooException(ExceptionMessages.NO_SUCH_NOTE);
             }
 
             return _mapper.Map<CollaboratorResponseDto>(await _collaboratorRepository.RemoveCollaborator(isCollaborator));
