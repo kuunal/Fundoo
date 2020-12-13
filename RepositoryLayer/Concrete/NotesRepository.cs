@@ -27,6 +27,10 @@ namespace RepositoryLayer.Concrete
         public async Task<Note> DeleteNote(int noteId, int userId)
         {
             Note note = await _context.Notes.FirstOrDefaultAsync(note => note.AccountId == userId && note.NoteId == noteId);
+            if (note == null)
+            {
+                return null;
+            }
             var deletedNote = _context.Notes.Remove(note);
             await _context.SaveChangesAsync();
             return deletedNote.Entity;
@@ -48,7 +52,7 @@ namespace RepositoryLayer.Concrete
 
         public async Task<List<Note>> GetNotes(int userId)
         {
-            return await _context.Notes
+            return await _context.Notes.OrderByDescending(note=>note.IsPin)
                          .Where(note => note.Account.AccountId == userId).ToListAsync();
         }
 
@@ -61,18 +65,15 @@ namespace RepositoryLayer.Concrete
 
         public async Task<Note> UpdateNote(Note noteToUpdate, Note note)
         {
-            return await Task.Run(async () =>
-            {
-                noteToUpdate.Image = note.Image;
-                noteToUpdate.Description = note.Description;
-                noteToUpdate.Color = note.Color;
-                noteToUpdate.IsArchieved = note.IsArchieved;
-                noteToUpdate.IsPin = note.IsPin;
-                noteToUpdate.Remainder = note.Remainder;
-                noteToUpdate.Title = note.Title;
-                await _context.SaveChangesAsync();
-                return note;
-            });
+            noteToUpdate.Image = note.Image;
+            noteToUpdate.Description = note.Description;
+            noteToUpdate.Color = note.Color;
+            noteToUpdate.IsArchieved = note.IsArchieved;
+            noteToUpdate.IsPin = note.IsPin;
+            noteToUpdate.Remainder = note.Remainder;
+            noteToUpdate.Title = note.Title;
+            await _context.SaveChangesAsync();
+            return note;
         }
 
         public async Task<Note> GetNoteByNoteIdAndUserId(int noteId, int userId)
