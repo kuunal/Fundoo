@@ -64,6 +64,7 @@ namespace Fundoo.Controllers
 
         [HttpPost]
         [TokenAuthenticationFilter]
+        [Cached(600)]
         public async Task<IActionResult> AddNoteASync([FromForm] NoteRequestDto note)
         {
             int userId = Convert.ToInt32(HttpContext.Items["userId"]);
@@ -71,14 +72,14 @@ namespace Fundoo.Controllers
             var addednote = await _service.AddNote(note, userId, email);
             return Ok(new
             {
-                Data = note,
+                Data = addednote,
                 StatusCode = (int)HttpStatusCode.Created,
                 Message = ResponseMessages.CREATED
             });
         }
 
         [HttpDelete]
-        [Route("delete/{noteId}")]
+        [Route("{noteId}")]
         [TokenAuthenticationFilter]
         [Cached(600)]
         public async Task<IActionResult> DeleteNoteAsync(int noteId)
@@ -87,11 +88,11 @@ namespace Fundoo.Controllers
             var result = await _service.DeleteNote(noteId, userId);
             if (result == null)
             {
-                return NotFound(new
+                return BadRequest(new
                 {
-                    Data = (string)null,
-                    StatusCode = (int)HttpStatusCode.NotFound,
-                    Message = ResponseMessages.NO_SUCH_NOTES
+                    Data = result,
+                    StatusCode = (int)HttpStatusCode.BadRequest,
+                    Message = ResponseMessages.DELETED
                 });
             }
             return Ok(new
@@ -106,6 +107,7 @@ namespace Fundoo.Controllers
         [HttpPost]
         [Route("{noteId}")]
         [TokenAuthenticationFilter]
+        [Cached(600)]
         public async Task<IActionResult> UpdateNoteAsync(int noteId, [FromBody] NoteRequestDto note)
         {
             int userId = Convert.ToInt32(HttpContext.Items["userId"]);
