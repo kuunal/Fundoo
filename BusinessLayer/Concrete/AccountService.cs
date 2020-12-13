@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BusinessLayer.Exceptions;
 using BusinessLayer.Interface;
 using BusinessLayer.MSMQ;
 using CustomException;
@@ -62,7 +63,7 @@ namespace BusinessLayer.Concrete
             Account user = await _repository.Get(email);
             if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
-                throw new FundooException("Login Failed");
+                throw new FundooException(ExceptionMessages.INVALID_CREDENTIALS);
             }
             string token = _tokenManager.Encode(user);
 
@@ -74,7 +75,7 @@ namespace BusinessLayer.Concrete
             Account user = await _repository.Get(email);
             if (user == null)
             {
-                throw new FundooException("No such user", 404);
+                throw new FundooException(ExceptionMessages.NO_SUCH_USER, 404);
             }
             string jwt = _tokenManager.Encode(user);
             string url = "https://" + currentUrl + "/html/reset.html?" + jwt;

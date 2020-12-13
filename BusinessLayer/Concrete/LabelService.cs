@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BusinessLayer.Exceptions;
 using BusinessLayer.Interface;
 using CustomException;
 using ModelLayer;
@@ -32,7 +33,7 @@ namespace BusinessLayer.Concrete
             Note isOwner = await _notesRepository.GetOwnerOfLabel(label.NoteId, userId);
             if (isOwner == null)
             {
-                throw new FundooException("No such note exists!");
+                throw new FundooException(ExceptionMessages.NO_SUCH_NOTE);
             }
             return _mapper.Map<LabelResponseDto>(await _repository.AddLabel(labelModel, userId));
         }
@@ -48,12 +49,12 @@ namespace BusinessLayer.Concrete
             Label label = await _repository.GetLabelByIdAsync(labelId);
             if (label == null)
             {
-                throw new FundooException("No such label exist!");
+                throw new FundooException(ExceptionMessages.NO_SUCH_LABEL);
             }
             Note isOwner = await _notesRepository.GetOwnerOfLabel(label.NoteId, userId);
             if (isOwner == null)
             {
-                throw new FundooException("No such note exists!");
+                throw new FundooException(ExceptionMessages.NO_SUCH_NOTE);
             }
             return _mapper.Map<LabelResponseDto>(await _repository.RemoveLabelAsync(label));
         }

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using BusinessLayer.ImagesCloud;
 using BusinessLayer.Interface;
+using CustomException;
+using Microsoft.EntityFrameworkCore;
 using ModelLayer;
 using ModelLayer.DTOs.NoteDTO;
 using RepositoryLayer.Concrete;
@@ -28,7 +30,7 @@ namespace BusinessLayer.Concrete
         {
             Note noteModel = _mapper.Map<Note>(note);
             noteModel.AccountId = userid;
-            if (noteModel.Image.Length > 0) {
+            if (noteModel.Image != null && noteModel.Image.Length > 0) {
                 noteModel.Image = await _cloudService.UpdloadToCloud(note.Image, email);
             }
             return _mapper.Map<NoteResponseDto>(await _repository.AddNote(noteModel));
@@ -54,6 +56,10 @@ namespace BusinessLayer.Concrete
         public async Task<NoteResponseDto> UpdateNote(int userId, int noteId, NoteRequestDto noteToUpdate)
         {
             Note note = await _repository.GetNoteByNoteIdAndUserId(noteId, userId);
+            if (note == null)
+            {
+                return null;
+            }
             return _mapper.Map<NoteResponseDto>(await _repository.UpdateNote(_mapper.Map<Note>(noteToUpdate), note));
         }
     }
