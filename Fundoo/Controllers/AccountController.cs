@@ -69,7 +69,7 @@ namespace Fundoo.Controllers
             return Ok(new
             {
                 Data =  new { user = user, token = token},
-                StatusCode = (int)HttpStatusCode.Accepted,
+                StatusCode = (int)HttpStatusCode.OK,
                 Message = ResponseMessages.SUCCESS
             });
         }
@@ -105,6 +105,32 @@ namespace Fundoo.Controllers
                 Data = (string)null,
                 StatusCode = HttpStatusCode.BadRequest,
                 Message = ResponseMessages.FAILED
+            });
+        }
+
+        [HttpPost]
+        [Route("/authentication/refresh")]
+        public async Task<IActionResult> GenerateRefreshToken()
+        {
+            var refreshToken = HttpContext.Request.Cookies
+                                    .Where(cookie => cookie.Key == "refresh-token")
+                                    .Select(cookie => cookie.Value)
+                                    .FirstOrDefault();
+            if (refreshToken == null)
+            {
+                return Unauthorized(new
+                {
+                    Data = (string) null,
+                    StatusCode = HttpStatusCode.Unauthorized,
+                    Message = ResponseMessages.NOTOKEN
+                });
+            }
+            string token = _service.GetNewTokenAsync(refreshToken);
+            return Unauthorized(new
+            {
+                Data = token,
+                StatusCode = HttpStatusCode.OK,
+                Message = ResponseMessages.SUCCESS
             });
         }
     }
