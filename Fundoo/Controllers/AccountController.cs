@@ -1,6 +1,7 @@
 ﻿using BusinessLayer.Interface;
 using Fundoo.Utilities;
 using Greeting.TokenAuthentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ModelLayer;
 using ModelLayer.DTOs.AccountDto;
@@ -58,7 +59,13 @@ namespace Fundoo.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto credentials)
         {
-            var (user, token) = await _service.Authenticate(credentials.Email, credentials.Password);
+            var (user, token, refreshToken) = await _service.Authenticate(credentials.Email, credentials.Password);
+            HttpContext.Response.Cookies.Append("refresh-token", 
+                        refreshToken, 
+                        new CookieOptions{ HttpOnly = true,  
+                        SameSite = SameSiteMode.Lax,
+                        Expires = DateTime.Now.AddDays(1)
+                        });
             return Ok(new
             {
                 Data =  new { user = user, token = token},
