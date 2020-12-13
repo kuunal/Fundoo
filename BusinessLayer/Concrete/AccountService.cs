@@ -4,11 +4,14 @@ using BusinessLayer.Interface;
 using BusinessLayer.MSMQ;
 using CustomException;
 using EmailService;
+using Microsoft.Extensions.Configuration;
 using ModelLayer;
 using ModelLayer.DTOs.AccountDto;
 using RepositoryLayer.Interface;
+using System.Configuration;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using TokenAuthentication;
 
@@ -20,17 +23,20 @@ namespace BusinessLayer.Concrete
         private IAccountRepository _repository;
         private readonly IMapper _mapper;
         private readonly IMqServices _mqServices;
+        private readonly IConfiguration _configuration;
         private readonly IEmailSender _emailSender;
 
         public AccountService(IAccountRepository repository
             , ITokenManager _tokenManager
             , IMapper mapper
-            , IMqServices mqServices) 
+            , IMqServices mqServices
+            , IConfiguration configuration) 
         {
             _repository = repository;
             this._tokenManager = _tokenManager;
             _mapper = mapper;
             _mqServices = mqServices;
+            _configuration = configuration;
         }
 
         public async Task<AccountResponseDto> Get(int id)
@@ -58,7 +64,7 @@ namespace BusinessLayer.Concrete
             return _mapper.Map<AccountResponseDto>(await _repository.AddAccount(encryptedPasswordAccount));
         }
 
-        public async Task<(AccountResponseDto, string)> Authenticate(string email, string password)
+        public async Task<(AccountResponseDto, string, string)> Authenticate(string email, string password)
         {
             Account user = await _repository.Get(email);
             if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
@@ -66,8 +72,9 @@ namespace BusinessLayer.Concrete
                 throw new FundooException(ExceptionMessages.INVALID_CREDENTIALS);
             }
             string token = _tokenManager.Encode(user);
-
-            return (_mapper.Map<AccountResponseDto>(user), token);
+            byte[] refreshSecretArray = Encoding.ASCII.GetBytes(_configuration.GetSection("Jwt")["RefreshSecretKey"]);
+            string refreshToken = _tokenManager.Encode(user, 1440, refreshSecretArray);
+            return (_mapper.Map<AccountResponseDto>(user), token, refreshToken);
         }
 
         public async Task ForgotPassword(string email, string currentUrl)
