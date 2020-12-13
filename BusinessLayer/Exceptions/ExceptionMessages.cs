@@ -13,6 +13,8 @@ namespace BusinessLayer.Exceptions
         public static readonly string NO_SUCH_COLLABORATOR = "No such collaborator";
         public static readonly string INVALID_CREDENTIALS = "Invalid ID or Password";
         public static readonly string NO_SUCH_LABEL = "No such label exist!";
+        public static readonly string INVALID_TOKEN = "Invalid Token";
+        public static readonly string TOKEN_EXPIRED = "Token expired";
 
     }
 }
