@@ -5,9 +5,11 @@ using BusinessLayer.MSMQ;
 using CustomException;
 using EmailService;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using ModelLayer;
 using ModelLayer.DTOs.AccountDto;
 using RepositoryLayer.Interface;
+using System;
 using System.Configuration;
 using System.Linq;
 using System.Security.Claims;
@@ -73,7 +75,9 @@ namespace BusinessLayer.Concrete
             }
             string token = _tokenManager.Encode(user);
             byte[] refreshSecretArray = Encoding.ASCII.GetBytes(_configuration.GetSection("Jwt")["RefreshSecretKey"]);
-            string refreshToken = _tokenManager.Encode(user, 1440, refreshSecretArray);
+            string refreshToken = _tokenManager.Encode(user
+                                            , Convert.ToInt32(_configuration.GetSection("Jwt")["RefreshExpiryTime"])
+                                            , refreshSecretArray);
             return (_mapper.Map<AccountResponseDto>(user), token, refreshToken);
         }
 
@@ -101,5 +105,24 @@ namespace BusinessLayer.Concrete
             return (await _repository.ResetPassword(user, BCrypt.Net.BCrypt.HashPassword(password)));
         }
 
+        public async Task<string> GetNewTokenAsync(string refreshToken)
+        {
+            ClaimsPrincipal claim;
+            try
+            {
+                claim = _tokenManager.Decode(refreshToken);
+            }
+            catch (SecurityTokenExpiredException)
+            {
+                throw new FundooException(ExceptionMessages.TOKEN_EXPIRED);
+            }
+            catch(Exception)
+            {
+                throw new FundooException(ExceptionMessages.INVALID_TOKEN);
+            }
+            var claimList = claim.Claims.ToList();
+            Account account = await _repository.Get(claimList[1].Value);
+            return _tokenManager.Encode(account);
+        }
     }
 }
