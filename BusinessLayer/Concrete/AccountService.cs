@@ -26,7 +26,6 @@ namespace BusinessLayer.Concrete
         private readonly IMapper _mapper;
         private readonly IMqServices _mqServices;
         private readonly IConfiguration _configuration;
-        private readonly IEmailSender _emailSender;
 
         public AccountService(IAccountRepository repository
             , ITokenManager _tokenManager
@@ -71,7 +70,7 @@ namespace BusinessLayer.Concrete
             Account user = await _repository.Get(email);
             if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
-                throw new FundooException(ExceptionMessages.INVALID_CREDENTIALS);
+                throw new FundooException(ExceptionMessages.INVALID_CREDENTIALS, 401);
             }
             string token = _tokenManager.Encode(user);
             byte[] refreshSecretArray = Encoding.ASCII.GetBytes(_configuration.GetSection("Jwt")["RefreshSecretKey"]);
@@ -88,7 +87,9 @@ namespace BusinessLayer.Concrete
             {
                 throw new FundooException(ExceptionMessages.NO_SUCH_USER, 404);
             }
-            string jwt = _tokenManager.Encode(user);
+            byte[] secretKey = Encoding.ASCII.GetBytes(_configuration.GetSection("Jwt")["ResetPasswordSecretKey"]);
+            int expiryTime = Convert.ToInt32(_configuration.GetSection("Jwt")["ExpiryTime"]);
+            string jwt = _tokenManager.Encode(user, expiryTime, secretKey);
             string url = "https://" + currentUrl + "/html/reset.html?" + jwt;
             Message message = new Message(new string[] { user.Email },
                     "Password Reset Email",
@@ -98,7 +99,7 @@ namespace BusinessLayer.Concrete
 
         public async Task<int> ResetPassword(string password, string token)
         {
-            ClaimsPrincipal claims = _tokenManager.Decode(token);
+            ClaimsPrincipal claims = _tokenManager.Decode(token, Encoding.ASCII.GetBytes(_configuration.GetSection("Jwt")["ResetPasswordSecretKey"]));
             var claim = claims.Claims.ToList();
             string email = claim[1].Value;
             Account user = await _repository.Get(email);
