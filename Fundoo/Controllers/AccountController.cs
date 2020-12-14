@@ -125,7 +125,7 @@ namespace Fundoo.Controllers
                     Message = ResponseMessages.NOTOKEN
                 });
             }
-            string token = _service.GetNewTokenAsync(refreshToken);
+            string token = await _service.GetNewTokenAsync(refreshToken);
             return Unauthorized(new
             {
                 Data = token,
