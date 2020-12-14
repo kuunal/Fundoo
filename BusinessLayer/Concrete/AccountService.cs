@@ -111,7 +111,7 @@ namespace BusinessLayer.Concrete
             ClaimsPrincipal claim;
             try
             {
-                claim = _tokenManager.Decode(refreshToken);
+                claim = _tokenManager.Decode(refreshToken, Encoding.ASCII.GetBytes(_configuration.GetSection("Jwt")["RefreshSecretKey"]));
             }
             catch (SecurityTokenExpiredException)
             {
