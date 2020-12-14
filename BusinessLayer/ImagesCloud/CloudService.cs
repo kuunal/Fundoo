@@ -35,7 +35,7 @@ namespace BusinessLayer.ImagesCloud
                         File = new FileDescription(email+DateTime.Now.ToString(), stream)
                     };
 
-                    uploadResult = _cloudinary.Upload(uploadParams);  
+                    uploadResult = await _cloudinary.UploadAsync(uploadParams);  
                 }
             }
             return uploadResult.Url.ToString();
