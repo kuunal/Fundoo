@@ -54,7 +54,12 @@ namespace Caching
                 string[] pathArray = context.HttpContext.Request.Path.Value.Split("/");
                 int? pathParam = null;
                 string cachedData = await cachedService.GetCachedResponseAsync(key);
-                List<NoteResponseDto> currentUserData = JsonConvert.DeserializeObject<List<NoteResponseDto>>(cachedData);
+                
+                List<NoteResponseDto> currentUserData = null;
+                if (cachedData != null)
+                {
+                    currentUserData = JsonConvert.DeserializeObject<List<NoteResponseDto>>(cachedData);
+                }
                 if (pathArray[pathArray.Length - 1].All(char.IsDigit))
                 {
                     pathParam = Convert.ToInt32(pathArray[pathArray.Length - 1]);
